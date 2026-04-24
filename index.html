@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Hub - Fateha Khanom</title>
+<style>
+  :root {
+    --eg-blue: #1a1f71;
+    --eg-yellow: #ffc72c;
+    --eg-dark: #0b0e3e;
+    --eg-light-blue: #e8eaf6;
+    --grey-100: #f5f5f5;
+    --grey-200: #eeeeee;
+    --grey-600: #757575;
+    --grey-800: #424242;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--grey-100); color: var(--grey-800); line-height: 1.5;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--eg-dark) 0%, var(--eg-blue) 100%);
+    color: white; padding: 48px; text-align: center; position: relative;
+  }
+  .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--eg-yellow); }
+  .header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.8; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 48px 32px; }
+  .prog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .prog-card {
+    background: white; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .prog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .prog-card .card-banner { padding: 24px; color: white; }
+  .prog-card .card-banner.hotel { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+  .prog-card .card-banner.horizon { background: linear-gradient(135deg, #1565c0, #1976d2); }
+  .prog-card .card-banner h2 { font-size: 20px; margin-bottom: 4px; }
+  .prog-card .card-banner .status { font-size: 12px; background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 12px; display: inline-block; }
+  .prog-card .card-body { padding: 20px 24px; }
+  .prog-card .card-body p { font-size: 14px; color: var(--grey-600); margin-bottom: 12px; }
+  .prog-card .card-body .meta { font-size: 12px; color: var(--grey-600); }
+  .prog-card .card-body .meta strong { color: var(--eg-dark); }
+  .coming-soon {
+    opacity: 0.5; pointer-events: none;
+  }
+  .coming-soon .card-banner::after {
+    content: 'COMING SOON'; display: block; margin-top: 8px;
+    font-size: 11px; letter-spacing: 1px; opacity: 0.7;
+  }
+  .footer { text-align: center; padding: 32px; font-size: 11px; color: var(--grey-600); }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Programme Hub</h1>
+  <p>Fateha Khanom, Business Programs Director - TPA Commercial Operations</p>
+</div>
+<div class="container">
+  <div class="prog-grid">
+    <a href="hotel-comp-fees/" class="prog-card">
+      <div class="card-banner hotel">
+        <h2>Hotel Comp on Fees</h2>
+        <span class="status">ACTIVE - Phase 1a In Progress</span>
+      </div>
+      <div class="card-body">
+        <p>Communication pathway, stakeholder map, phase timelines, PR/crisis planning, and programme governance.</p>
+        <div class="meta">
+          <strong>$88.5M</strong> annual RMD | <strong>3 phases</strong> | <strong>22 stakeholders</strong>
+        </div>
+      </div>
+    </a>
+    <a href="new-horizon/" class="prog-card coming-soon">
+      <div class="card-banner horizon">
+        <h2>New Horizon</h2>
+        <span class="status">PAUSED</span>
+      </div>
+      <div class="card-body">
+        <p>Field Org Re-design / GTM Revolution. Phase Gate Review pending.</p>
+        <div class="meta">
+          <strong>Status:</strong> On Pause (Apr 2026)
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+<div class="footer">Expedia Group - TPA Commercial Operations | Confidential</div>
+</body>
+</html>
