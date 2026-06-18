@@ -1,0 +1,2351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My PM Toolkit | Built with Claude Code</title>
+<style>
+  :root {
+    --eg-navy: #1a1f71;
+    --eg-dark: #0b0e3e;
+    --eg-blue: #0058A8;
+    --eg-yellow: #ffc72c;
+    --eg-light-blue: #e8eaf6;
+    --green: #2e7d32;
+    --green-light: #e8f5e9;
+    --orange: #e65100;
+    --orange-light: #fff3e0;
+    --purple: #6a1b9a;
+    --purple-light: #f3e5f5;
+    --grey-50: #fafafa;
+    --grey-100: #f5f5f5;
+    --grey-200: #eeeeee;
+    --grey-300: #e0e0e0;
+    --grey-600: #757575;
+    --grey-800: #424242;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--grey-100); color: var(--grey-800); line-height: 1.6; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--eg-dark), var(--eg-navy));
+    color: white; padding: 48px 48px 40px; position: relative;
+  }
+  .header::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--eg-yellow); }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .sub { font-size: 15px; opacity: 0.75; margin-top: 6px; }
+  .header .byline { font-size: 13px; opacity: 0.5; margin-top: 16px; }
+
+  /* Tab navigation */
+  .tab-nav {
+    background: white; border-bottom: 2px solid var(--grey-200);
+    display: flex; padding: 0 48px; gap: 0; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 14px 24px; font-size: 13px; font-weight: 600; color: var(--grey-600);
+    border: none; background: none; cursor: pointer; position: relative;
+    white-space: nowrap; transition: color 0.2s;
+  }
+  .tab-btn:hover { color: var(--eg-dark); }
+  .tab-btn.active { color: var(--eg-navy); }
+  .tab-btn.active::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 3px; background: var(--eg-yellow); border-radius: 2px 2px 0 0;
+  }
+  .tab-btn .badge {
+    font-size: 10px; background: var(--eg-light-blue); color: var(--eg-navy);
+    padding: 1px 7px; border-radius: 8px; margin-left: 6px;
+  }
+
+  /* Tab content */
+  .tab-panel { display: none; padding: 32px 48px; max-width: 1200px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* Section titles */
+  .section-title {
+    font-size: 18px; font-weight: 700; color: var(--eg-dark);
+    margin: 28px 0 16px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--eg-yellow); display: inline-block;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* Stats strip */
+  .stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; margin-top: -28px; }
+  .stat-card {
+    background: white; border-radius: 10px; padding: 22px 24px; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-top: 3px solid var(--eg-navy);
+  }
+  .stat-card .number { font-size: 36px; font-weight: 700; color: var(--eg-navy); }
+  .stat-card .label { font-size: 12px; color: var(--grey-600); margin-top: 4px; font-weight: 500; }
+
+  /* Cards */
+  .card-grid { display: grid; gap: 16px; }
+  .card-grid.two-col { grid-template-columns: 1fr 1fr; }
+  .card-grid.three-col { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: white; border-radius: 12px; padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 4px solid var(--grey-300);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .card.navy { border-left-color: var(--eg-navy); }
+  .card.blue { border-left-color: var(--eg-blue); }
+  .card.green { border-left-color: var(--green); }
+  .card.orange { border-left-color: var(--orange); }
+  .card.purple { border-left-color: var(--purple); }
+  .card.yellow { border-left-color: var(--eg-yellow); }
+
+  .card-icon { font-size: 28px; margin-bottom: 10px; }
+  .card h3 { font-size: 16px; font-weight: 700; color: var(--eg-dark); margin-bottom: 6px; }
+  .card .card-desc { font-size: 13px; color: var(--grey-600); line-height: 1.5; }
+  .card .card-detail { font-size: 12px; color: var(--grey-800); margin-top: 10px; line-height: 1.6; }
+  .card .card-detail strong { color: var(--eg-navy); }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 10px; margin-right: 4px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .tag.navy { background: var(--eg-light-blue); color: var(--eg-navy); }
+  .tag.green { background: var(--green-light); color: var(--green); }
+  .tag.orange { background: var(--orange-light); color: var(--orange); }
+  .tag.purple { background: var(--purple-light); color: var(--purple); }
+  .tag.blue { background: #e1f5fe; color: #0277bd; }
+  .tag.grey { background: var(--grey-200); color: var(--grey-800); }
+  .tag.yellow { background: #fff8e1; color: #f57f17; }
+
+  /* Callout */
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+  .callout.info { background: var(--eg-light-blue); border-left: 4px solid var(--eg-navy); }
+  .callout.tip { background: var(--green-light); border-left: 4px solid var(--green); }
+  .callout.warning { background: var(--orange-light); border-left: 4px solid var(--orange); }
+  .callout strong { color: var(--eg-dark); }
+
+  /* Command box */
+  .cmd-box {
+    background: var(--eg-dark); color: #e0e0e0; border-radius: 8px;
+    padding: 10px 16px; font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px; margin: 8px 0; display: inline-block;
+  }
+  .cmd-box .slash { color: var(--eg-yellow); font-weight: 700; }
+  .cmd-box .arg { color: #93b8d7; }
+
+  /* Workflow steps */
+  .workflow-steps { display: flex; gap: 0; align-items: stretch; margin: 20px 0; }
+  .wf-step {
+    flex: 1; background: white; padding: 18px 16px; position: relative;
+    border-top: 3px solid var(--eg-navy);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .wf-step:first-child { border-radius: 10px 0 0 10px; }
+  .wf-step:last-child { border-radius: 0 10px 10px 0; }
+  .wf-step .step-num { font-size: 11px; font-weight: 700; color: var(--eg-navy); text-transform: uppercase; letter-spacing: 0.5px; }
+  .wf-step h4 { font-size: 14px; font-weight: 700; color: var(--eg-dark); margin: 4px 0; }
+  .wf-step p { font-size: 11px; color: var(--grey-600); }
+  .wf-arrow { display: flex; align-items: center; color: var(--eg-yellow); font-size: 24px; font-weight: 700; padding: 0 2px; }
+
+  /* Table */
+  .tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; margin: 12px 0; }
+  .tbl th { background: var(--eg-dark); color: white; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tbl th:first-child { border-radius: 8px 0 0 0; }
+  .tbl th:last-child { border-radius: 0 8px 0 0; }
+  .tbl td { padding: 10px 14px; border-bottom: 1px solid var(--grey-200); }
+  .tbl tr:hover td { background: var(--grey-50); }
+  .tbl tr:nth-child(even) td { background: var(--grey-50); }
+
+  /* Gallery */
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 16px 0; }
+  .gallery-item {
+    background: white; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s;
+  }
+  .gallery-item:hover { transform: translateY(-3px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .gallery-preview {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 40px; position: relative;
+  }
+  .gallery-preview.navy-bg { background: linear-gradient(135deg, var(--eg-dark), var(--eg-navy)); }
+  .gallery-preview.blue-bg { background: linear-gradient(135deg, #0d47a1, var(--eg-blue)); }
+  .gallery-preview.green-bg { background: linear-gradient(135deg, #1b5e20, var(--green)); }
+  .gallery-preview.purple-bg { background: linear-gradient(135deg, #4a148c, var(--purple)); }
+  .gallery-preview.orange-bg { background: linear-gradient(135deg, #bf360c, var(--orange)); }
+  .gallery-preview.yellow-bg { background: linear-gradient(135deg, #f57f17, #fbc02d); }
+  .gallery-preview .preview-label { color: white; font-size: 14px; font-weight: 700; text-align: center; line-height: 1.4; }
+  .gallery-preview .preview-label small { display: block; font-size: 11px; font-weight: 400; opacity: 0.7; }
+  .gallery-info { padding: 16px 18px; }
+  .gallery-info h4 { font-size: 14px; font-weight: 700; color: var(--eg-dark); margin-bottom: 4px; }
+  .gallery-info p { font-size: 12px; color: var(--grey-600); }
+
+  /* Big number highlight */
+  .big-num { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 12px; }
+  .big-num .n { font-size: 48px; font-weight: 700; color: var(--eg-navy); line-height: 1; }
+  .big-num .u { font-size: 16px; color: var(--grey-600); }
+
+  /* Secret sauce section */
+  .sauce-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .sauce-card {
+    background: white; border-radius: 12px; padding: 24px; text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-bottom: 3px solid var(--eg-yellow);
+  }
+  .sauce-card .sauce-icon { font-size: 36px; margin-bottom: 10px; }
+  .sauce-card h4 { font-size: 14px; font-weight: 700; color: var(--eg-dark); margin-bottom: 6px; }
+  .sauce-card p { font-size: 12px; color: var(--grey-600); line-height: 1.5; }
+
+  /* Getting started checklist */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 12px 16px; border-bottom: 1px solid var(--grey-200); font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-num {
+    min-width: 28px; height: 28px; border-radius: 50%;
+    background: var(--eg-navy); color: white; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .check-text strong { color: var(--eg-dark); }
+
+  .footer { text-align: center; padding: 24px; font-size: 11px; color: var(--grey-600); border-top: 1px solid var(--grey-200); margin-top: 32px; }
+
+  /* Modal overlay */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(11,14,62,0.6); z-index:200;
+    align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(4px);
+  }
+  .modal-overlay.open { display:flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .modal {
+    background:white; border-radius:14px; max-width:960px; width:100%; max-height:85vh;
+    overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative;
+  }
+  .modal-header {
+    padding:24px 28px 16px; border-bottom:1px solid var(--grey-200); position:sticky;
+    top:0; background:white; z-index:1; border-radius:14px 14px 0 0;
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .modal-header h2 { font-size:20px; font-weight:700; color:var(--eg-dark); }
+  .modal-header .modal-sub { font-size:12px; color:var(--grey-600); margin-top:2px; }
+  .modal-close {
+    width:32px; height:32px; border-radius:50%; border:none; background:var(--grey-100);
+    font-size:18px; cursor:pointer; color:var(--grey-600); display:flex; align-items:center;
+    justify-content:center; flex-shrink:0; transition:background 0.2s;
+  }
+  .modal-close:hover { background:var(--grey-200); color:var(--eg-dark); }
+  .modal-body { padding:24px 28px 28px; }
+
+  /* Mini preview inside modal */
+  .mini-preview {
+    border:2px solid var(--grey-200); border-radius:10px; overflow:hidden; margin-bottom:20px;
+    font-size:11px; line-height:1.5;
+  }
+  .mini-preview .mp-header {
+    padding:12px 16px; color:white; font-weight:700; font-size:13px; position:relative;
+  }
+  .mini-preview .mp-header::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--eg-yellow); }
+  .mini-preview .mp-header.navy { background:linear-gradient(135deg,var(--eg-dark),var(--eg-navy)); }
+  .mini-preview .mp-header.green { background:linear-gradient(135deg,#1b5e20,var(--green)); }
+  .mini-preview .mp-header.blue { background:linear-gradient(135deg,#0d47a1,var(--eg-blue)); }
+  .mini-preview .mp-header.purple { background:linear-gradient(135deg,#4a148c,var(--purple)); }
+  .mini-preview .mp-header.orange { background:linear-gradient(135deg,#bf360c,var(--orange)); }
+  .mini-preview .mp-header.yellow { background:linear-gradient(135deg,#e65100,#f57f17); }
+  .mini-preview .mp-tabs {
+    display:flex; gap:0; background:var(--grey-50); border-bottom:1px solid var(--grey-200); padding:0 16px;
+  }
+  .mini-preview .mp-tab {
+    padding:6px 14px; font-size:10px; font-weight:600; color:var(--grey-600);
+    border-bottom:2px solid transparent; cursor:default;
+  }
+  .mini-preview .mp-tab.active { color:var(--eg-navy); border-bottom-color:var(--eg-yellow); }
+  .mini-preview .mp-body { padding:16px; background:var(--grey-50); }
+  .mini-preview .mp-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+  .mini-preview .mp-card {
+    background:white; border-radius:6px; padding:8px 10px; text-align:center;
+    border-top:2px solid var(--eg-navy); box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .mini-preview .mp-card .mp-val { font-size:16px; font-weight:700; color:var(--eg-navy); }
+  .mini-preview .mp-card .mp-lbl { font-size:9px; color:var(--grey-600); }
+  .mini-preview .mp-table { width:100%; border-collapse:collapse; font-size:10px; }
+  .mini-preview .mp-table th {
+    background:var(--eg-dark); color:white; padding:5px 8px; text-align:left;
+    font-size:9px; text-transform:uppercase; letter-spacing:0.3px;
+  }
+  .mini-preview .mp-table td { padding:5px 8px; border-bottom:1px solid var(--grey-200); }
+  .mini-preview .mp-table tr:nth-child(even) td { background:white; }
+  .mini-preview .mp-section { font-size:11px; font-weight:700; color:var(--eg-dark); margin:10px 0 6px; }
+  .mini-preview .mp-bullets { padding-left:14px; margin:0; font-size:10px; color:var(--grey-800); }
+  .mini-preview .mp-bullets li { margin-bottom:3px; }
+  .mini-preview .mp-rag {
+    display:inline-block; padding:1px 7px; border-radius:8px; font-size:9px;
+    font-weight:700; color:white;
+  }
+  .mini-preview .mp-rag.green { background:var(--green); }
+  .mini-preview .mp-rag.amber { background:#f9a825; color:#333; }
+  .mini-preview .mp-rag.red { background:#d32f2f; }
+
+  .modal-section { margin-bottom:16px; }
+  .modal-section h4 { font-size:13px; font-weight:700; color:var(--eg-navy); margin-bottom:6px; }
+  .modal-section p, .modal-section li { font-size:12px; color:var(--grey-800); line-height:1.6; }
+  .modal-section ul { padding-left:18px; margin:0; }
+  .modal-section ul li { margin-bottom:4px; }
+  .modal-prompt {
+    background:var(--eg-dark); color:#e0e0e0; border-radius:8px; padding:12px 16px;
+    font-family:'Consolas','Courier New',monospace; font-size:12px; margin:8px 0;
+  }
+  .modal-prompt .slash { color:var(--eg-yellow); font-weight:700; }
+
+  /* Make gallery items clickable */
+  .gallery-item.clickable { cursor:pointer; }
+  .gallery-item.clickable::after {
+    content:'Click to preview'; position:absolute; bottom:8px; right:12px;
+    font-size:10px; color:rgba(255,255,255,0.7); font-weight:600; opacity:0;
+    transition:opacity 0.2s;
+  }
+  .gallery-item.clickable:hover::after { opacity:1; }
+  .gallery-item.clickable .gallery-preview { position:relative; }
+
+  @media (max-width: 900px) {
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    .card-grid.two-col, .card-grid.three-col, .gallery, .sauce-grid { grid-template-columns: 1fr; }
+    .workflow-steps { flex-direction: column; }
+    .wf-arrow { transform: rotate(90deg); justify-content: center; }
+    .tab-nav { padding: 0 16px; }
+    .tab-panel { padding: 20px 16px; }
+    .header { padding: 32px 20px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>My PM Toolkit</h1>
+  <div class="sub">How I use Claude Code to run programs faster, with less admin and better outputs</div>
+  <div class="byline">Fateha Khanom | Business Programs Director, TPA Commercial Operations | April 2026</div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('dashboards')">Dashboards & Reporting <span class="badge">5</span></button>
+  <button class="tab-btn" onclick="showTab('decks')">PowerPoint Generation <span class="badge">60+</span></button>
+  <button class="tab-btn" onclick="showTab('meetings')">Meeting & Comms Prep</button>
+  <button class="tab-btn" onclick="showTab('commands')">My Commands <span class="badge">15</span></button>
+  <button class="tab-btn" onclick="showTab('playbook')">Playbook <span class="badge">18</span></button>
+  <button class="tab-btn" onclick="showTab('secret')">The Secret Sauce</button>
+  <button class="tab-btn" onclick="showTab('lessons')">Lessons Learned</button>
+  <button class="tab-btn" onclick="showTab('start')">Getting Started</button>
+</div>
+
+<!-- ================================ -->
+<!-- TAB: OVERVIEW                     -->
+<!-- ================================ -->
+<div class="tab-panel active" id="tab-overview">
+
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="number">60+</div>
+      <div class="label">Decks Generated</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">15</div>
+      <div class="label">Custom Commands</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">40+</div>
+      <div class="label">Dashboards & Reports</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">32</div>
+      <div class="label">Outputs Last Week</div>
+    </div>
+  </div>
+
+  <div class="section-title">What is this?</div>
+  <p style="font-size:14px; color:var(--grey-800); max-width:800px; margin-bottom:20px;">
+    Over six weeks, I built a personalised program management toolkit using Claude Code (Anthropic's AI coding assistant). It connects to Jira, Confluence, Slack and Glean, and produces EG-branded outputs: decks, dashboards, status reports, meeting briefs, and more. Everything here is repeatable. You can build your own.
+  </p>
+
+  <div class="callout info">
+    <strong>The key insight:</strong> The magic is not in the AI itself. It is in the "memory files" you build over time: your design system, your report templates, your program context. These turn generic AI outputs into production-quality work that matches your team's standards.
+  </div>
+
+  <div class="section-title">What it covers</div>
+  <div class="card-grid three-col">
+    <div class="card navy" style="cursor:pointer;" onclick="jumpTab('dashboards')">
+      <div class="card-icon">&#128202;</div>
+      <h3>Dashboards & Reporting</h3>
+      <div class="card-desc">Weekly recaps, program pulses, action trackers, status reports: all auto-generated and EG-branded.</div>
+      <div style="margin-top:10px;">
+        <span class="tag navy">Weekly Recap</span>
+        <span class="tag navy">Program Pulse</span>
+        <span class="tag navy">Action Tracker</span>
+        <span class="tag navy">Status Reports</span>
+      </div>
+    </div>
+    <div class="card blue" style="cursor:pointer;" onclick="jumpTab('decks')">
+      <div class="card-icon">&#128196;</div>
+      <h3>PowerPoint Generation</h3>
+      <div class="card-desc">Full EG-branded decks from a single prompt. SteerCo packs, one-pagers, charters, roadmaps, stakeholder maps.</div>
+      <div style="margin-top:10px;">
+        <span class="tag blue">60+ decks</span>
+        <span class="tag blue">12 slide types</span>
+        <span class="tag blue">EG design system</span>
+      </div>
+    </div>
+    <div class="card green" style="cursor:pointer;" onclick="jumpTab('meetings')">
+      <div class="card-icon">&#128172;</div>
+      <h3>Meeting & Comms Prep</h3>
+      <div class="card-desc">Talking points, pre-reads, stakeholder briefs, chase messages, and escalation documents, ready in seconds.</div>
+      <div style="margin-top:10px;">
+        <span class="tag green">Meeting Briefs</span>
+        <span class="tag green">Pre-reads</span>
+        <span class="tag green">Chase Messages</span>
+      </div>
+    </div>
+    <div class="card orange">
+      <div class="card-icon">&#128197;</div>
+      <h3>Excel & Scheduling</h3>
+      <div class="card-desc">Workback schedules with formula-driven Gantt charts, updated programmatically without breaking formatting.</div>
+      <div style="margin-top:10px;">
+        <span class="tag orange">Gantt Charts</span>
+        <span class="tag orange">Excel COM</span>
+      </div>
+    </div>
+    <div class="card purple" style="cursor:pointer;" onclick="jumpTab('secret')">
+      <div class="card-icon">&#128270;</div>
+      <h3>Knowledge Integration</h3>
+      <div class="card-desc">Pulls from Jira, Confluence, Slack, and Glean simultaneously. Synthesises across sources instead of tab-switching.</div>
+      <div style="margin-top:10px;">
+        <span class="tag purple">Jira</span>
+        <span class="tag purple">Confluence</span>
+        <span class="tag purple">Slack</span>
+        <span class="tag purple">Glean</span>
+      </div>
+    </div>
+    <div class="card yellow" style="cursor:pointer;" onclick="jumpTab('commands')">
+      <div class="card-icon">&#9889;</div>
+      <h3>Custom Slash Commands</h3>
+      <div class="card-desc">15 reusable commands I trigger daily. Morning briefings, status reports, tracker updates: all one command away.</div>
+      <div style="margin-top:10px;">
+        <span class="tag yellow">/pulse</span>
+        <span class="tag yellow">/deck</span>
+        <span class="tag yellow">/meeting-prep</span>
+      </div>
+    </div>
+    <div class="card" style="border-left-color:#e91e63; cursor:pointer;" onclick="jumpTab('playbook')">
+      <div class="card-icon">&#128214;</div>
+      <h3>Playbook: Artifact Generator</h3>
+      <div class="card-desc">18 standard PM artifacts from the TPA Playbook, each with a ready-to-use command. Charters, RAID logs, roadmaps, status reports, retrospectives, and more.</div>
+      <div style="margin-top:10px;">
+        <span class="tag navy">Initiation</span>
+        <span class="tag blue">Planning</span>
+        <span class="tag green">Execution</span>
+        <span class="tag orange">Monitoring</span>
+        <span class="tag purple">Closure</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">A typical day</div>
+  <div class="workflow-steps">
+    <div class="wf-step" style="border-top-color:var(--green);">
+      <div class="step-num" style="color:var(--green);">09:00</div>
+      <h4>/pulse</h4>
+      <p>Morning briefing flags overdue actions, deadlines, blockers across all programs</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step" style="border-top-color:var(--eg-blue);">
+      <div class="step-num" style="color:var(--eg-blue);">09:30</div>
+      <h4>/meeting-prep</h4>
+      <p>Generate talking points and context brief before a stakeholder call</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step" style="border-top-color:var(--purple);">
+      <div class="step-num" style="color:var(--purple);">11:00</div>
+      <h4>/deck</h4>
+      <p>Build an EG-branded SteerCo deck from latest program data in minutes</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step" style="border-top-color:var(--orange);">
+      <div class="step-num" style="color:var(--orange);">14:00</div>
+      <h4>/status-report</h4>
+      <p>Generate bi-weekly CO portfolio status report in the correct template format</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step" style="border-top-color:var(--eg-navy);">
+      <div class="step-num" style="color:var(--eg-navy);">16:30</div>
+      <h4>/update-tracker</h4>
+      <p>Refresh the action tracker with latest items from meetings, Slack, and Jira</p>
+    </div>
+  </div>
+
+  <div class="section-title">Time saved</div>
+  <table class="tbl">
+    <thead>
+      <tr><th>Task</th><th>Before (manual)</th><th>After (toolkit)</th><th>Saving</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>SteerCo / briefing deck</strong></td><td>~2 hours</td><td>~5 minutes</td><td style="color:var(--green); font-weight:700;">~95%</td></tr>
+      <tr><td><strong>Weekly recap</strong></td><td>~45 minutes</td><td>1 command</td><td style="color:var(--green); font-weight:700;">~95%</td></tr>
+      <tr><td><strong>Meeting prep</strong></td><td>~20 minutes</td><td>~2 minutes</td><td style="color:var(--green); font-weight:700;">~90%</td></tr>
+      <tr><td><strong>Bi-weekly status report</strong></td><td>~1 hour</td><td>~10 minutes</td><td style="color:var(--green); font-weight:700;">~85%</td></tr>
+      <tr><td><strong>Action tracker update</strong></td><td>~30 minutes</td><td>1 command</td><td style="color:var(--green); font-weight:700;">~95%</td></tr>
+      <tr><td><strong>Chase / escalation drafting</strong></td><td>~15 minutes</td><td>~1 minute</td><td style="color:var(--green); font-weight:700;">~93%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px; color:var(--grey-600); margin-top:6px;">Estimates based on 6 weeks of use. Your mileage will vary depending on program complexity and how much context you encode in memory files.</p>
+
+  <div class="callout info" style="margin-top:20px;">
+    <strong>Data and privacy:</strong> All memory files are stored locally on your machine. MCP connectors use your existing SSO authentication. Claude does not retain program data between sessions beyond what is in your local files. Follow the same data handling policies you use for any internal tool.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: DASHBOARDS & REPORTING       -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-dashboards">
+
+  <div class="section-title">Dashboards & Reporting</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    These are interactive HTML pages generated on demand. They pull live data from Jira, Confluence, Slack, and Glean, then render as EG-branded dashboards you can open in any browser. No logins, no setup, no dependencies.
+  </p>
+
+  <div class="gallery">
+    <div class="gallery-item clickable" onclick="openModal('modal-recap')">
+      <div class="gallery-preview navy-bg">
+        <div class="preview-label">Weekly Recap<small>Monday morning dashboard - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Weekly Recap Dashboard</h4>
+        <p>Tabbed layout: one tab per program plus Overview and Team. Pulls past week's meetings, Slack highlights, document updates. Summary count cards, consolidated actions tracker, week-at-a-glance timeline.</p>
+        <div style="margin-top:8px;">
+          <span class="tag navy">Auto-generated</span>
+          <span class="tag green">Every Monday</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item clickable" onclick="openModal('modal-pulse')">
+      <div class="gallery-preview green-bg">
+        <div class="preview-label">Program Pulse<small>Daily morning briefing - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Program Pulse (/pulse)</h4>
+        <p>Quick morning scan: flags overdue actions, deadlines today and this week, blockers requiring attention.</p>
+        <div style="margin-top:8px;">
+          <span class="tag green">Daily</span>
+          <span class="tag grey">Low-token</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item clickable" onclick="openModal('modal-tracker')">
+      <div class="gallery-preview blue-bg">
+        <div class="preview-label">Action Tracker<small>Interactive task management - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Action Tracker Dashboard</h4>
+        <p>Interactive HTML with inline editing, filters (status, owner, priority), tabs per program, completion logging.</p>
+        <div style="margin-top:8px;">
+          <span class="tag blue">Interactive</span>
+          <span class="tag blue">localStorage</span>
+          <span class="tag navy">Filterable</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item clickable" onclick="openModal('modal-progdash')">
+      <div class="gallery-preview purple-bg">
+        <div class="preview-label">Program Dashboard<small>On-demand deep dive - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Program-Specific Dashboard</h4>
+        <p>Say "all things [program name]" and get a single-page view: RAG, milestones, stakeholders, risks, actions.</p>
+        <div style="margin-top:8px;">
+          <span class="tag purple">On-demand</span>
+          <span class="tag purple">Multi-source</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item clickable" onclick="openModal('modal-comms')">
+      <div class="gallery-preview orange-bg">
+        <div class="preview-label">Comms Pathway<small>Stakeholder comms map - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Communication Pathway</h4>
+        <p>Interactive tabbed dashboard: comms channels, stakeholder groups, phase messaging, swimlanes, escalation routes.</p>
+        <div style="margin-top:8px;">
+          <span class="tag orange">Interactive</span>
+          <span class="tag orange">Tabbed</span>
+          <span class="tag navy">22 stakeholders</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item clickable" onclick="openModal('modal-status')">
+      <div class="gallery-preview yellow-bg">
+        <div class="preview-label">Status Report<small>CO portfolio format - click to preview</small></div>
+      </div>
+      <div class="gallery-info">
+        <h4>Bi-Weekly Status Report</h4>
+        <p>Auto-generates in the exact CO Portfolio template format: headlines, path-to-green, last/next 4 weeks, risks, milestones.</p>
+        <div style="margin-top:8px;">
+          <span class="tag yellow">Template-compliant</span>
+          <span class="tag grey">Bi-weekly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <strong>Tip for your own dashboards:</strong> Start with one. The Weekly Recap is the easiest to justify: it saves 30-60 minutes every Monday morning and gives you a single link to share with your manager. Once that's working, the others build on the same pattern.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: POWERPOINT GENERATION        -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-decks">
+
+  <div class="section-title">PowerPoint Generation</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    This was the biggest time-saver. Claude generates full EG-branded decks programmatically using python-pptx. The design system (colours, fonts, layouts, positioning) is encoded in a memory file, so every deck looks consistent and professional.
+  </p>
+
+  <div class="card" style="border-left-color:var(--eg-navy); margin-bottom:24px;">
+    <h3>By the numbers</h3>
+    <div style="display:flex; gap:48px; flex-wrap:wrap; margin-top:12px;">
+      <div>
+        <div class="big-num"><span class="n">60+</span><span class="u">decks created</span></div>
+      </div>
+      <div>
+        <div class="big-num"><span class="n">12</span><span class="u">slide types</span></div>
+      </div>
+      <div>
+        <div class="big-num"><span class="n">114</span><span class="u">layouts in template</span></div>
+      </div>
+      <div>
+        <div class="big-num"><span class="n">~5</span><span class="u">min per deck</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Slide types I use most</div>
+  <table class="tbl">
+    <thead>
+      <tr><th>Slide Type</th><th>Use Case</th><th>Key Elements</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Title Slide</strong></td><td>Every deck opening</td><td>EG blue background, title, subtitle, author, confidential badge</td></tr>
+      <tr style="cursor:pointer;" onclick="openModal('modal-slide-kpi')"><td><strong>Objectives/Overview</strong> <span style="font-size:10px; color:var(--grey-600);">click to preview</span></td><td>Setting the scene</td><td>4x KPI cards, bullet list, governance committee</td></tr>
+      <tr><td><strong>Phase Table</strong></td><td>Phased rollout planning</td><td>Full-width table: phase, model, RMD, current/future, RAG, dates</td></tr>
+      <tr style="cursor:pointer;" onclick="openModal('modal-slide-timeline')"><td><strong>Timeline/Roadmap</strong> <span style="font-size:10px; color:var(--grey-600);">click to preview</span></td><td>Visual schedule</td><td>Phase badges (green/blue/grey) + detail table + KPI cards</td></tr>
+      <tr><td><strong>RAPID Matrix</strong></td><td>Decision governance</td><td>Role assignments with colour-coded legend</td></tr>
+      <tr><td><strong>Work Breakdown</strong></td><td>Workstream planning</td><td>Multi-column cards with phase tags and owner assignments</td></tr>
+      <tr style="cursor:pointer;" onclick="openModal('modal-slide-raid')"><td><strong>Risks & Issues</strong> <span style="font-size:10px; color:var(--grey-600);">click to preview</span></td><td>RAID tracking</td><td>Severity badges, ID, description, mitigation, probability, owner</td></tr>
+      <tr><td><strong>Stakeholder Map</strong></td><td>Comms planning</td><td>GTM group cards with role assignments and engagement status</td></tr>
+      <tr><td><strong>One-Pager</strong></td><td>Executive briefing</td><td>Compact overview: KPIs, scope, timeline, key ask, all on one slide</td></tr>
+      <tr><td><strong>Finance Summary</strong></td><td>Business case</td><td>RMD calculations, pro-rata figures, haircut assumptions</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">How it works</div>
+  <div class="workflow-steps">
+    <div class="wf-step">
+      <div class="step-num">Step 1</div>
+      <h4>Template memory file</h4>
+      <p>A markdown file defines the EG design system: exact hex codes, font names, layout IDs, positioning rules, text sizes</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step">
+      <div class="step-num">Step 2</div>
+      <h4>Program context</h4>
+      <p>Separate memory files store program details: phases, financials, stakeholders, milestones, risks</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step">
+      <div class="step-num">Step 3</div>
+      <h4>One prompt</h4>
+      <p>"Create a SteerCo deck for 8 May" and Claude combines template + context + latest Jira/Confluence data</p>
+    </div>
+    <div class="wf-arrow">&#10132;</div>
+    <div class="wf-step">
+      <div class="step-num">Step 4</div>
+      <h4>Branded .pptx</h4>
+      <p>Output is an EG-branded PowerPoint file ready to share. Edit in PowerPoint as normal for final tweaks.</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <strong>Critical learning:</strong> The template memory file is what makes or breaks deck quality. Without it, every AI-generated deck looks like generic clip art. With it, stakeholders cannot tell the difference between hand-built and generated slides. It took a few iterations to get right, but once encoded, every future deck benefits.
+  </div>
+
+  <div class="callout warning">
+    <strong>Practical note:</strong> Claude uses python-pptx (a Python library) to build decks. It works best for structured content: tables, KPI cards, timelines, matrices. For highly visual or illustrative slides, you will still want to polish in PowerPoint. The 80/20 rule applies: Claude builds the structure, you add the finishing touches.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: MEETING & COMMS PREP         -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-meetings">
+
+  <div class="section-title">Meeting & Communications Prep</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    The second biggest time-saver. Before any meeting, Claude pulls context from Jira, Confluence, Slack, and Glean, then generates a structured brief with talking points, attendee context, and objectives. After meetings, it extracts actions and drafts follow-ups.
+  </p>
+
+  <div class="card-grid two-col">
+    <div class="card green" style="cursor:pointer;" onclick="openModal('modal-meeting-prep')">
+      <h3>Meeting Briefs <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">Before any stakeholder call, generate a one-page brief: who's attending, their role and priorities, what was discussed last time, open actions, suggested talking points, and key asks.</div>
+      <div class="cmd-box"><span class="slash">/meeting-prep</span> <span class="arg">Kamal sync on Phase 1a timeline</span></div>
+    </div>
+
+    <div class="card green" style="cursor:pointer;" onclick="openModal('modal-preread')">
+      <h3>Working Group Pre-reads <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">Generates a structured pre-read document for recurring working groups. Includes agenda, decisions needed, progress since last session, and appendix data.</div>
+      <div class="cmd-box"><span class="slash">/wg-preread</span></div>
+    </div>
+
+    <div class="card blue" style="cursor:pointer;" onclick="openModal('modal-stakeholder')">
+      <h3>Stakeholder Briefings <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">One-page overview for when a new stakeholder joins the program or needs a quick catch-up. Covers: background, current state, their role, key dates, and who to talk to.</div>
+      <div class="cmd-box"><span class="slash">/stakeholder-brief</span> <span class="arg">Rachel Bird - HMP lead</span></div>
+    </div>
+
+    <div class="card blue" style="cursor:pointer;" onclick="openModal('modal-decision')">
+      <h3>Decision Papers <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">Structured one-page decision documents: the problem, options considered, recommendation, impact, and required approvals. Ready for leadership review.</div>
+      <div class="cmd-box"><span class="slash">/decision-paper</span> <span class="arg">Phase 1a rollout date change</span></div>
+    </div>
+
+    <div class="card orange" style="cursor:pointer;" onclick="openModal('modal-chase')">
+      <h3>Chase Messages <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">Drafts polite but firm follow-up messages for overdue items. Includes context on what was agreed, when, and the current impact of the delay.</div>
+      <div class="cmd-box"><span class="slash">/chase</span> <span class="arg">Legal review sign-off from Andrew</span></div>
+    </div>
+
+    <div class="card orange" style="cursor:pointer;" onclick="openModal('modal-escalation')">
+      <h3>Escalation Briefs <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">When something needs to go up the chain: structured document with impact statement, timeline, what's been tried, the specific ask, and recommended next steps.</div>
+      <div class="cmd-box"><span class="slash">/escalation-brief</span> <span class="arg">Phase 1a date risk</span></div>
+    </div>
+
+    <div class="card purple" style="cursor:pointer;" onclick="openModal('modal-extract')">
+      <h3>Post-Meeting Action Extraction <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">After a call, paste your rough notes and Claude extracts: action items with owners and dates, decisions made, key discussion points, and items to park.</div>
+      <div class="cmd-box"><span class="slash">/extract-actions</span> <span class="arg">from today's WG call</span></div>
+    </div>
+
+    <div class="card purple" style="cursor:pointer;" onclick="openModal('modal-grill')">
+      <h3>Grill Me (Meeting Rehearsal) <span style="font-size:10px; color:var(--grey-600); font-weight:400;">click to preview</span></h3>
+      <div class="card-desc">Before a high-stakes meeting, Claude pressure-tests your position: asks the tough questions stakeholders might raise, pokes holes in your plan, and helps you prepare responses.</div>
+      <div class="cmd-box"><span class="slash">/grill-me</span> <span class="arg">SteerCo presentation on 8 May</span></div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <strong>My favourite combo:</strong> Run /meeting-prep before the call, take rough notes during it, then /extract-actions afterwards. The full cycle takes maybe 10 minutes of my time and produces a brief, talking points, and a clean action list.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: MY COMMANDS                  -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-commands">
+
+  <div class="section-title">My Commands (Slash Commands)</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    These are custom "skills" (reusable command templates). Type the command and Claude knows exactly what to do, what format to use, and which sources to pull from. They are the building blocks of the daily workflow.
+  </p>
+
+  <table class="tbl">
+    <thead>
+      <tr><th>Command</th><th>Category</th><th>What it does</th><th>When I use it</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/pulse</span></div></td>
+        <td><span class="tag green">Daily</span></td>
+        <td>Morning briefing: overdue actions, deadlines, blockers, reminders</td>
+        <td>Every morning, 09:00</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/meeting-prep</span></div></td>
+        <td><span class="tag blue">Meetings</span></td>
+        <td>Pre-meeting brief with talking points, attendee context, open items</td>
+        <td>Before any stakeholder call</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/wg-preread</span></div></td>
+        <td><span class="tag blue">Meetings</span></td>
+        <td>Working group pre-read: agenda, progress, decisions needed</td>
+        <td>Day before WG sessions</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/deck</span></div></td>
+        <td><span class="tag purple">Outputs</span></td>
+        <td>Generate an EG-branded PowerPoint deck from a prompt</td>
+        <td>SteerCos, briefings, one-pagers</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/status-report</span></div></td>
+        <td><span class="tag purple">Outputs</span></td>
+        <td>Bi-weekly CO portfolio status report in template format</td>
+        <td>Every other week</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/update-tracker</span></div></td>
+        <td><span class="tag navy">Tracking</span></td>
+        <td>Refresh the action tracker with new items from meetings, Slack, Jira</td>
+        <td>After meetings, end of day</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/week-ahead</span></div></td>
+        <td><span class="tag navy">Planning</span></td>
+        <td>5-day forward view: key meetings, deadlines, deliverables</td>
+        <td>Friday afternoons, Monday mornings</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/chase</span></div></td>
+        <td><span class="tag orange">Comms</span></td>
+        <td>Draft a chase message for overdue action items</td>
+        <td>When items are overdue</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/escalation-brief</span></div></td>
+        <td><span class="tag orange">Comms</span></td>
+        <td>Structured escalation document with impact and ask</td>
+        <td>When blockers need leadership</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/stakeholder-brief</span></div></td>
+        <td><span class="tag orange">Comms</span></td>
+        <td>One-page overview for new or returning stakeholders</td>
+        <td>Onboarding, catch-ups</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/decision-paper</span></div></td>
+        <td><span class="tag purple">Outputs</span></td>
+        <td>One-page decision document: problem, options, recommendation</td>
+        <td>Before key decision points</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/extract-actions</span></div></td>
+        <td><span class="tag blue">Meetings</span></td>
+        <td>Pull action items from meeting notes with owners and dates</td>
+        <td>After every meeting</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/grill-me</span></div></td>
+        <td><span class="tag blue">Meetings</span></td>
+        <td>Pressure-test your position before a high-stakes meeting</td>
+        <td>Before SteerCos, exec reviews</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/raid</span></div></td>
+        <td><span class="tag navy">Tracking</span></td>
+        <td>Proactive risk and issue scan across active programs</td>
+        <td>Weekly, or before governance</td>
+      </tr>
+      <tr>
+        <td><div class="cmd-box" style="margin:0;"><span class="slash">/jira-digest</span></div></td>
+        <td><span class="tag navy">Tracking</span></td>
+        <td>Summary of recent Jira activity for a program or sprint</td>
+        <td>Status updates, stand-ups</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <strong>These are all custom-built.</strong> They are not built-in Claude features. Each one is a "skill" file: a markdown template that tells Claude what to do, what sources to check, and what format to output. You can write your own for any repeatable task.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: PLAYBOOK                      -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-playbook">
+
+  <div class="section-title">Program Playbook: Artifact Generator</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:16px;">
+    Every artifact in the TPA PM Playbook can be generated with a single command. Below is the full catalog, grouped by program phase. Click the command to copy it, then paste into Claude Code and add your program-specific details.
+  </p>
+
+  <div class="callout info">
+    <strong>How to use:</strong> Type the slash command in Claude Code with your program name. Each command loads the official TPA Playbook template, pulls data from your program memory files and connected tools (Jira, Confluence, Glean), and outputs a populated artifact in the correct format. No manual formatting needed.
+  </div>
+
+  <!-- SETUP GUIDE -->
+  <div style="background: linear-gradient(135deg, #f0f4ff, #e8f5e9); border-radius: 12px; padding: 28px 32px; margin-bottom: 28px; border: 1px solid var(--grey-300); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--eg-navy), var(--eg-blue), var(--green));"></div>
+    <h3 style="margin: 0 0 16px; color: var(--eg-navy); font-size: 16px;">Quick Setup (5 minutes)</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+      <div style="background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+        <div style="font-size: 24px; font-weight: 700; color: var(--eg-navy); margin-bottom: 6px;">1</div>
+        <div style="font-size: 13px; font-weight: 600; color: var(--eg-dark); margin-bottom: 8px;">Download Templates</div>
+        <div style="font-size: 12px; color: var(--grey-600); margin-bottom: 10px;">Get the official Playbook templates from SharePoint and save to a local folder (e.g. <code>Documents/Playbook/</code>)</div>
+        <a href="https://expediacorp.sharepoint.com/sites/CommercialOps/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FCommercialOps%2FShared%20Documents%2FTemplates&viewid=8562b922%2D76ce%2D45e4%2D98d3%2D4cc3e50d1dba" target="_blank" style="display: inline-block; background: var(--eg-navy); color: white; font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: 6px; text-decoration: none;">Open SharePoint</a>
+      </div>
+      <div style="background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+        <div style="font-size: 24px; font-weight: 700; color: var(--eg-navy); margin-bottom: 6px;">2</div>
+        <div style="font-size: 13px; font-weight: 600; color: var(--eg-dark); margin-bottom: 8px;">Set Your Path</div>
+        <div style="font-size: 12px; color: var(--grey-600); margin-bottom: 10px;">Add this line to your CLAUDE.md (or project memory):</div>
+        <code style="display: block; background: var(--grey-100); padding: 8px 10px; border-radius: 4px; font-size: 11px; word-break: break-all;">Playbook templates path: C:/Users/YourName/Documents/Playbook</code>
+      </div>
+      <div style="background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+        <div style="font-size: 24px; font-weight: 700; color: var(--eg-navy); margin-bottom: 6px;">3</div>
+        <div style="font-size: 13px; font-weight: 600; color: var(--eg-dark); margin-bottom: 8px;">Run Commands</div>
+        <div style="font-size: 12px; color: var(--grey-600); margin-bottom: 10px;">Type any <code>/playbook-*</code> command in Claude Code with your program name. It loads the template and populates it automatically.</div>
+        <code style="display: block; background: var(--grey-100); padding: 8px 10px; border-radius: 4px; font-size: 11px;">/playbook-charter My Program</code>
+      </div>
+    </div>
+    <div style="margin-top: 16px; font-size: 11px; color: var(--grey-600); border-top: 1px solid var(--grey-200); padding-top: 12px;">
+      <strong>Prerequisites:</strong> Claude Code installed, Python 3.12+ with <code>python-pptx</code>, <code>openpyxl</code>, and <code>python-docx</code> packages. A program memory file for context-aware population.
+    </div>
+  </div>
+
+  <!-- INITIATION PHASE -->
+  <div class="section-title" style="margin-top:32px;">Initiation</div>
+  <div class="card-grid" style="gap:12px;">
+
+    <div class="card navy">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Program Charter</h3>
+          <div class="card-desc">Program name, opportunity/problem statement, scope (in/out), key delivery dates, dependencies, required resources, success metrics, KPIs, executive sponsor, program manager, TPA theme, stakeholder groups, Jira reference.</div>
+        </div>
+        <span class="tag navy">PPTX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program name, opportunity statement, scope in/out, plan/key dates, dependencies, related projects, resources, success metrics/KPIs, executive sponsor, PM, TPA theme, stakeholder groups, start/end date, Jira ref, LOB, commercial org, TPA goals.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-charter</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: 01. Program Charter.pptx | Loads official template, populates from program memory</div>
+    </div>
+
+    <div class="card navy">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Stakeholder Management (List, Map, RACI)</h3>
+          <div class="card-desc">Stakeholder list with groups (Core/Involved/Informed/Teams), names, teams, responsibilities, categories, RACI roles, and teams impacted by change.</div>
+        </div>
+        <span class="tag navy">PPTX/XLSX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Group, ID, Name, Team, Responsibilities, Stakeholder category (working directly, provide input, stay informed), Teams impacted, RACI roles (R/A/C/I).
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-stakeholders</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: 02. Stakeholder List.pptx / Stakeholder List.xlsx | Add "with RACI" for RACI matrix</div>
+    </div>
+
+    <div class="card navy">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Collaboration Approach / Working Practices</h3>
+          <div class="card-desc">Defines collaboration tools, document locations, core working forums, meeting cadences, and ways of working.</div>
+        </div>
+        <span class="tag grey">GUIDANCE</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Collaboration tools (Smartsheet/Confluence/SharePoint), document locations, core working forums, meeting frequency, ways of working.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Collaboration and Working Practices slide for [program name]: include tools we use, where documents live, core forums with cadences, ways of working principles. Single slide overview.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">No dedicated template. Typically a single slide in program deck.</div>
+    </div>
+
+    <div class="card navy">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>RAID Analysis</h3>
+          <div class="card-desc">Risks, Assumptions, Issues, and Dependencies with IDs, descriptions, impact assessments, mitigations, owners, and review dates.</div>
+        </div>
+        <span class="tag navy">PPTX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Risk ID, description, assumption, issue description, dependency description, type, impact, mitigation, owner, next review date.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-raid</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: 07. RAID Analysis.pptx | Uses official 2x2 RAID grid format</div>
+    </div>
+
+  </div>
+
+  <!-- PLANNING PHASE -->
+  <div class="section-title" style="margin-top:32px;">Planning</div>
+  <div class="card-grid" style="gap:12px;">
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Governance Framework</h3>
+          <div class="card-desc">Sponsor, PM, SteerCo membership, working groups, forums/cadences, escalation paths, decision rights, communication channels.</div>
+        </div>
+        <span class="tag blue">PPTX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Sponsor, Program Manager, SteerCo members, working groups, forums with cadences, escalation paths, decision rights (RAPID/RACI), communication channels.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Governance Framework slide for [program name]: SteerCo membership, working group composition, forum cadences, escalation paths, decision rights matrix. Pull from program memory.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Typically embedded in program decks as "Program Governance" slides.</div>
+    </div>
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Program Roadmap (High-Level)</h3>
+          <div class="card-desc">Visual timeline with time buckets, key deliverables/milestones, phase indicators, workstreams, RAG status, and KPIs per milestone.</div>
+        </div>
+        <span class="tag blue">PPTX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Time buckets (quarters/months), key deliverables, milestones, phase indicators, workstreams, RAG status, high-level KPIs per milestone.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Program Roadmap for [program name]: phased timeline with quarter/month buckets, key milestones, workstream lanes, RAG status per phase, KPI targets. Use roadmap slide template pattern.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Roadmap template (status report style)</div>
+    </div>
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Detailed Plan (Schedule / WBS)</h3>
+          <div class="card-desc">Task-level plan with workstreams, owners, start/end dates, dependencies, status, % complete. Best built in Smartsheet or Excel.</div>
+        </div>
+        <span class="tag orange">EXCEL</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Task name, workstream, owner, start/end dates, dependencies, status, % complete, comments.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">Create a workback schedule for [program name] in Excel with: workstreams, tasks, owners, start/end dates, dependencies, Gantt chart columns. Use the workback schedule format from memory.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">No Playbook template. Uses Smartsheet or Excel with COM automation. See workback-schedule-format.md.</div>
+    </div>
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Risks and Issues Log</h3>
+          <div class="card-desc">Ongoing risk/issue tracking with IDs, types, RAG, mitigations, owners, and review dates. Covered by RAID Analysis.</div>
+        </div>
+        <span class="tag navy">PPTX/HTML</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> ID, Type (Risk/Issue), Description, Impact, Probability, RAG, Mitigation/Action, Owner, Due date, Link to RAID.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/raid</span> <span class="arg">[program name] - focus on risks and issues only, include probability ratings and next review dates</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Uses RAID Analysis template. No separate risk-log template.</div>
+    </div>
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Dependencies Log</h3>
+          <div class="card-desc">Tracks upstream/downstream dependencies with owners, required-by dates, impact if not met, and mitigation.</div>
+        </div>
+        <span class="tag navy">PPTX/HTML</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Dependency ID, Description, Upstream/downstream item, Owner, Required by date, Impact if not met, Mitigation, Status.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/raid</span> <span class="arg">[program name] - focus on dependencies only, include upstream/downstream detail and required-by dates</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Uses RAID Analysis template (Dependencies column). No stand-alone dependency template.</div>
+    </div>
+
+    <div class="card blue">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Communication Plan</h3>
+          <div class="card-desc">Structured comms plan: timing, channel/tactic, message, objective, audience/segment, owner, dependencies, status.</div>
+        </div>
+        <span class="tag orange">XLSX/HTML</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Date/timing, Tactic/channel (email, WebEx, video), Message/topic, Objective (awareness, adoption), Audience/segment, Owner, Dependencies/creative assets, Status/notes.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-comms-plan</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Communication Plan Template.xlsx | Add "html" for interactive dashboard version</div>
+    </div>
+
+  </div>
+
+  <!-- EXECUTION PHASE -->
+  <div class="section-title" style="margin-top:32px;">Execution</div>
+  <div class="card-grid" style="gap:12px;">
+
+    <div class="card green">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Status Report / Program Status Report</h3>
+          <div class="card-desc">CO Portfolio format: program name, objective, GROW priority, KPIs, health RAG, headlines, path to green, last/next 4 weeks, risks, milestones.</div>
+        </div>
+        <span class="tag green">DOCX/PPTX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program name, one-line objective, TPA GROW priority, success metrics/KPIs (quantified), TPA initiative, PM, sponsor, start/closure dates, current phase, health (previous to current), headlines, path to green, last 4 weeks, next 4 weeks, top 3 risks, milestones, roadmap link.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-status-report</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: 02. Status Report_New_0525.docx | CO Portfolio format with RAG definitions built in</div>
+    </div>
+
+    <div class="card green">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Broadcasts</h3>
+          <div class="card-desc">Program broadcast: headline, recent wins with metrics, workstream highlights, upcoming milestones, impact/so-what, links.</div>
+        </div>
+        <span class="tag green">EMAIL/DOCX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program name/theme, broadcast period, headline(s), recent wins (with metrics), workstream highlights, upcoming milestones, impact/"so what", links to docs, contacts/owners, optional visuals.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">Draft a program broadcast for [program name] covering [period e.g. Q2 2026]: headline, recent wins with metrics, workstream highlights, upcoming milestones, impact statement. Format for email distribution.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Broadcast template.eml / Broadcast Template.docx</div>
+    </div>
+
+    <div class="card green">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Change Management Plan</h3>
+          <div class="card-desc">Current vs future state, stakeholder impact, readiness assessment, communication/training activities, adoption metrics. PROSCI/ADKAR framework.</div>
+        </div>
+        <span class="tag grey">FRAMEWORK</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Change description, current vs future state, stakeholder groups/impact, change impact assessment, readiness assessment, communication activities, training activities, adoption metrics, risks/mitigations, owners/timelines, PROSCI/ADKAR steps.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Change Management Plan for [program name]: current vs future state, stakeholder impact assessment, readiness assessment, comms and training activities, adoption metrics, ADKAR mapping. 4-5 slides.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">No single template. Framework-driven (PROSCI/ADKAR). Usually multi-slide in program deck.</div>
+    </div>
+
+    <div class="card green">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Test and Learn / Experiment Plan</h3>
+          <div class="card-desc">Hypothesis, metrics/success criteria, variants vs control, sample/scope, run dates, guardrails, data sources, decision rules.</div>
+        </div>
+        <span class="tag grey">FLEXIBLE</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Hypothesis, metrics/success criteria, variant(s) vs control, sample/scope, run dates, risks/guardrails, data sources, owner, decision rules.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Test and Learn plan for [experiment name] in [program name]: hypothesis, success metrics, variant vs control, sample scope, run dates, guardrails, data sources, decision rules. Single slide or 2-slide format.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">No generic template. Typically Miro/PowerPoint/Excel per program.</div>
+    </div>
+
+  </div>
+
+  <!-- MONITORING & CONTROLLING PHASE -->
+  <div class="section-title" style="margin-top:32px;">Monitoring and Controlling</div>
+  <div class="card-grid" style="gap:12px;">
+
+    <div class="card orange">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Program / Project Assessment</h3>
+          <div class="card-desc">Comprehensive health assessment: scope, schedule, cost, quality, risks, resources, stakeholders, comms, benefits. With findings, overall rating, and recommendations.</div>
+        </div>
+        <span class="tag orange">DOCX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program name, assessment date, assessor(s), reporting to, overview (objectives, scope, purpose), assessment areas (scope, schedule, cost, quality, risks, resources, stakeholders, comms, benefits), findings per area, overall rating, recommendations, follow-up owners/dates.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">Generate a Program Assessment for [program name]: assess scope, schedule, cost, quality, risks, resources, stakeholder engagement, communications, and benefits realization. Include findings per area, overall health rating, and recommendations. Pull latest data from Jira and program memory.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Program Project Assessment Template1.docx</div>
+    </div>
+
+    <div class="card orange">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Assessment Checklist (Lightweight Health Check)</h3>
+          <div class="card-desc">Quick health check across 10 areas with key questions, Yes/No/N/A status, and comments. Fast alternative to full assessment.</div>
+        </div>
+        <span class="tag orange">DOCX/HTML</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Assessment area (Scope, Schedule, Cost, Quality, Risks, Resources, Stakeholder engagement, Communications, Change management, Benefits), key question per area, status (Yes/No/N/A), comments.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/playbook-assessment</span> <span class="arg">[program name]</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Assessment Checklist Template.docx | Add "full" for detailed narrative, "html" for interactive</div>
+    </div>
+
+  </div>
+
+  <!-- CLOSURE PHASE -->
+  <div class="section-title" style="margin-top:32px;">Closure</div>
+  <div class="card-grid" style="gap:12px;">
+
+    <div class="card purple">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Retrospective</h3>
+          <div class="card-desc">Structured retro: Loved/Longed for/Loathed/Learned (or Keep/Stop/Start), individual feedback, agreed actions with owners and target dates.</div>
+        </div>
+        <span class="tag purple">DOCX/HTML</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program/project name, timeframe/phase, participants, retro categories (Loved/Longed for/Loathed/Learned or Keep/Stop/Start), individual feedback items, owner/initials, agreed actions, action owners, target dates, session date/notes.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">Generate a Retrospective template for [program name], [phase/timeframe]: use 4Ls format (Loved, Longed for, Loathed, Learned). Pre-populate with key events from program memory. Include actions table with owners and target dates. Output as interactive HTML.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: Retrospective Template (from Closure page, Word/Miro format)</div>
+    </div>
+
+    <div class="card purple">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h3>Program Closure / Handover</h3>
+          <div class="card-desc">Close-out document: objectives recap, deliverables summary, outcomes vs metrics, benefits status, remaining actions, handover items, residual risks, closure approvals.</div>
+        </div>
+        <span class="tag purple">PPTX/DOCX</span>
+      </div>
+      <div class="card-detail">
+        <strong>Key data fields:</strong> Program name, objectives/scope recap, summary of deliverables, outcomes vs success metrics, benefits realization status, remaining open actions/decisions, handover items and BAU owners, residual risks/issues, closure approvals (sponsor/director), links to key artifacts.
+      </div>
+      <div class="cmd-box" style="margin-top:10px; cursor:pointer;" onclick="copyCmd(this)"><span class="slash">/deck</span> <span class="arg">Program Closure deck for [program name]: objectives recap, deliverables summary, outcomes vs success metrics, benefits realization, remaining actions, handover items with BAU owners, residual risks, closure approvals. 5-6 slides.</span></div>
+      <div style="font-size:10px; color:var(--grey-600); margin-top:4px;">Template: 5. Closure Template (includes transition templates and example close-out decks)</div>
+    </div>
+
+  </div>
+
+  <!-- QUICK REFERENCE TABLE -->
+  <div class="section-title" style="margin-top:40px;">Quick Reference: All Artifacts</div>
+  <table class="tbl">
+    <thead>
+      <tr><th>Phase</th><th>Artifact</th><th>Command</th><th>Output</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="tag navy">Initiation</span></td><td>Program Charter</td><td><code>/playbook-charter [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag navy">Initiation</span></td><td>Stakeholder List/Map/RACI</td><td><code>/playbook-stakeholders [program]</code></td><td>PPTX/XLSX</td></tr>
+      <tr><td><span class="tag navy">Initiation</span></td><td>Collaboration Approach</td><td><code>/deck Collaboration slide for [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag navy">Initiation</span></td><td>RAID Analysis</td><td><code>/playbook-raid [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Governance Framework</td><td><code>/deck Governance Framework for [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Program Roadmap</td><td><code>/deck Program Roadmap for [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Detailed Plan / WBS</td><td><code>Create a workback schedule for [program]</code></td><td>XLSX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Risks and Issues Log</td><td><code>/playbook-raid [program] - risks only</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Dependencies Log</td><td><code>/playbook-raid [program] - deps only</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag blue">Planning</span></td><td>Communication Plan</td><td><code>/playbook-comms-plan [program]</code></td><td>XLSX/HTML</td></tr>
+      <tr><td><span class="tag green">Execution</span></td><td>Status Report</td><td><code>/playbook-status-report [program]</code></td><td>DOCX</td></tr>
+      <tr><td><span class="tag green">Execution</span></td><td>Broadcasts</td><td><code>Draft a program broadcast for [program]</code></td><td>Email/DOCX</td></tr>
+      <tr><td><span class="tag green">Execution</span></td><td>Change Management Plan</td><td><code>/deck Change Management Plan for [program]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag green">Execution</span></td><td>Test and Learn Plan</td><td><code>/deck Test and Learn plan for [experiment]</code></td><td>PPTX</td></tr>
+      <tr><td><span class="tag orange">Monitoring</span></td><td>Program Assessment</td><td><code>/playbook-assessment [program] full</code></td><td>DOCX/HTML</td></tr>
+      <tr><td><span class="tag orange">Monitoring</span></td><td>Assessment Checklist</td><td><code>/playbook-assessment [program]</code></td><td>DOCX/HTML</td></tr>
+      <tr><td><span class="tag purple">Closure</span></td><td>Retrospective</td><td><code>/deck Retrospective for [program]</code></td><td>HTML/PPTX</td></tr>
+      <tr><td><span class="tag purple">Closure</span></td><td>Program Closure / Handover</td><td><code>/deck Program Closure for [program]</code></td><td>PPTX</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip" style="margin-top:24px;">
+    <strong>Pro tip:</strong> For artifacts that use <code>/deck</code>, Claude will automatically apply EG branding from the template memory file. For HTML outputs, dashboards are interactive and can be opened in any browser. For Excel outputs, COM automation preserves formulas and formatting.
+  </div>
+
+  <div class="callout info">
+    <strong>Building new artifact commands:</strong> If you need to generate an artifact not listed here, describe it clearly in a prompt and Claude will build it. If you use it more than twice, ask Claude to save it as a custom skill so it becomes a reusable slash command.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: THE SECRET SAUCE             -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-secret">
+
+  <div class="section-title">The Secret Sauce</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    Anyone can ask Claude a question. What makes this a proper toolkit is the infrastructure underneath. Three things turn generic AI into a personalised program management engine:
+  </p>
+
+  <div class="sauce-grid">
+    <div class="sauce-card">
+      <div class="sauce-icon">&#128218;</div>
+      <h4>Memory Files</h4>
+      <p>Markdown files that persist across sessions. They store your design system, program context, stakeholder details, template rules, and lessons learned. Claude reads these at the start of every conversation, so it already knows your world.</p>
+    </div>
+    <div class="sauce-card">
+      <div class="sauce-icon">&#9889;</div>
+      <h4>Custom Skills</h4>
+      <p>Reusable command templates (slash commands). Each one defines: what to do, what sources to check, what format to output. They encode your workflow so you do not have to explain it every time.</p>
+    </div>
+    <div class="sauce-card">
+      <div class="sauce-icon">&#128279;</div>
+      <h4>MCP Connectors</h4>
+      <p>Model Context Protocol servers that connect Claude to your tools: Jira, Confluence, Slack, Glean, Trino. Claude queries them directly instead of you copy-pasting between tabs.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Memory files: the real investment</div>
+  <p style="font-size:13px; color:var(--grey-800); margin-bottom:16px;">
+    This is where 80% of the quality comes from. Here is what I have built over six weeks:
+  </p>
+
+  <table class="tbl">
+    <thead>
+      <tr><th>Memory File</th><th>What it stores</th><th>Why it matters</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MEMORY.md</strong></td>
+        <td>Profile, preferences, active programs, reminders, in-progress items</td>
+        <td>Claude knows who I am, what I'm working on, and my preferences every session</td>
+      </tr>
+      <tr>
+        <td><strong>eg-pptx-template.md</strong></td>
+        <td>EG colour palette, font system, layout IDs, slide patterns, spacing rules, text sizes</td>
+        <td>Every deck matches the EG brand without me specifying colours each time</td>
+      </tr>
+      <tr>
+        <td><strong>hotel-comp-on-fees.md</strong></td>
+        <td>Full program context: phases, financials, stakeholders, milestones, decisions, risks</td>
+        <td>Claude has deep program knowledge without me re-explaining the program</td>
+      </tr>
+      <tr>
+        <td><strong>new-horizon.md</strong></td>
+        <td>Second program's context, status, stakeholders, key dates</td>
+        <td>Same benefit, different program. Scales to as many programs as you run.</td>
+      </tr>
+      <tr>
+        <td><strong>co-status-report-guidelines.md</strong></td>
+        <td>CO Portfolio report template: required sections, RAG definitions, formatting rules</td>
+        <td>Status reports are template-compliant every time, no manual checking</td>
+      </tr>
+      <tr>
+        <td><strong>workback-schedule-format.md</strong></td>
+        <td>Excel tab structure, Gantt formula patterns, section layout, column mappings</td>
+        <td>Programmatic updates to the schedule without breaking formulas or formatting</td>
+      </tr>
+      <tr>
+        <td><strong>action-tracker-format.md</strong></td>
+        <td>Dashboard schema, features, update rules, data format</td>
+        <td>Tracker updates are consistent and never break the interactive features</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <strong>Start small.</strong> You do not need all of these on day one. Begin with MEMORY.md (your profile and preferences) and one program context file. The rest can be added as you encounter the need. Each file saves time on every future interaction with that topic.
+  </div>
+
+  <div class="section-title">MCP connectors: your tool integrations</div>
+  <div class="card-grid three-col" style="margin-top:4px;">
+    <div class="card navy">
+      <h3>Atlassian</h3>
+      <div class="card-desc">Jira: read/create/edit issues, search with JQL, transition statuses. Confluence: read/create/update pages, search with CQL.</div>
+      <div class="card-detail"><strong>Use cases:</strong> Status reports, RAID tracking, backlog creation from specs, meeting note publishing</div>
+    </div>
+    <div class="card purple">
+      <h3>Slack</h3>
+      <div class="card-desc">Read channels, search messages, draft announcements. Surfaces relevant conversations without you scrolling through channels.</div>
+      <div class="card-detail"><strong>Use cases:</strong> Weekly recaps, finding prior decisions, stakeholder pulse checks</div>
+    </div>
+    <div class="card green">
+      <h3>Glean</h3>
+      <div class="card-desc">Enterprise search across all company knowledge: SharePoint, Confluence, Slack, email, Drive. The connective tissue.</div>
+      <div class="card-detail"><strong>Use cases:</strong> Meeting prep, research, finding prior art, understanding org context</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: LESSONS LEARNED              -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-lessons">
+
+  <div class="section-title">Lessons Learned</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    Six weeks of building this toolkit was not smooth sailing. Here is what I wish I had known from day one, and what to expect if you start building your own.
+  </p>
+
+  <div class="section-title">The first week is rough. That is normal.</div>
+  <div class="card-grid two-col">
+    <div class="card orange">
+      <h3>First 3 decks looked terrible</h3>
+      <div class="card-desc">Without a template memory file, Claude used wrong fonts, wrong colours, wrong positioning. Every deck looked like generic clip art. It took 3-4 iterations of correcting and encoding rules before decks started looking professional.</div>
+      <div class="card-detail"><strong>Fix:</strong> Invest time upfront encoding your design system. Once done, every future deck benefits. The ROI compounds fast.</div>
+    </div>
+    <div class="card orange">
+      <h3>Context disappears between sessions</h3>
+      <div class="card-desc">I kept re-explaining my program, my stakeholders, my preferences. Every session felt like starting over. It was frustrating and slow.</div>
+      <div class="card-detail"><strong>Fix:</strong> Write your MEMORY.md and program context files. This was the single biggest unlock. Claude reads them at session start and already knows your world.</div>
+    </div>
+    <div class="card orange">
+      <h3>Outputs need editing, not just accepting</h3>
+      <div class="card-desc">Early on I treated outputs as final. They were not. Claude gets 80% right and needs you to refine the last 20%. That is the workflow: generate fast, polish to quality.</div>
+      <div class="card-detail"><strong>Fix:</strong> Treat Claude like a very fast first-drafter. Your expertise is still needed for accuracy, tone, and judgement. The time saving is in the drafting, not the thinking.</div>
+    </div>
+    <div class="card orange">
+      <h3>Corrections need to be saved</h3>
+      <div class="card-desc">I would correct something (wrong colour, wrong terminology, wrong date format) and then Claude would make the same mistake next session. Corrections in conversation are ephemeral.</div>
+      <div class="card-detail"><strong>Fix:</strong> When you correct something, ask Claude to save it to memory. "Remember: always use RMD not GP." This makes corrections permanent.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Technical lessons</div>
+  <div class="card-grid two-col">
+    <div class="card navy">
+      <h3>Excel: use COM, not openpyxl</h3>
+      <div class="card-desc">The Python library openpyxl destroys merged cells, conditional formatting, and complex formulas. Lost a workback schedule to this. Now all Excel work uses Win32 COM automation (talks to Excel directly).</div>
+      <div class="card-detail"><strong>Rule:</strong> If your Excel file has merged cells, formulas, or conditional formatting, always use COM. It is slower but safe.</div>
+    </div>
+    <div class="card navy">
+      <h3>PowerPoint: Layout 114 (Blank) is your friend</h3>
+      <div class="card-desc">I tried using template layouts with pre-positioned placeholders. They fight you. The title appears mid-page, text boxes overlap. Much better to use Blank layout and build everything from scratch with exact coordinates.</div>
+      <div class="card-detail"><strong>Rule:</strong> Blank layout + custom title bar rectangle + positioned content = full control.</div>
+    </div>
+    <div class="card navy">
+      <h3>Jira API cannot update rich-text fields</h3>
+      <div class="card-desc">Spent time trying to programmatically update "Status Update" and "Next Steps" fields on Program issue types. The API rejects these. They must be updated in the Jira UI.</div>
+      <div class="card-detail"><strong>Rule:</strong> Use the API for structured fields (dates, assignee, status transitions). Use the UI for rich-text narrative fields.</div>
+    </div>
+    <div class="card navy">
+      <h3>HTML dashboards beat SharePoint for speed</h3>
+      <div class="card-desc">I considered building dashboards in SharePoint or Power BI. Too much overhead for a one-person program. Single-file HTML with localStorage gives you interactivity, persistence, and zero dependencies. Open in any browser, works offline.</div>
+      <div class="card-detail"><strong>Rule:</strong> Start with HTML. Move to a proper tool only if you need multi-user collaboration or live data refresh.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Process and mindset lessons</div>
+  <div class="card-grid two-col">
+    <div class="card green">
+      <h3>Build incrementally, not all at once</h3>
+      <div class="card-desc">I did not plan all 15 commands upfront. I built each one when I hit a task for the third time. "I keep doing this manually" = time to automate it. The toolkit grew organically from real needs.</div>
+    </div>
+    <div class="card green">
+      <h3>Memory files are living documents</h3>
+      <div class="card-desc">They are not "set and forget". I update program context files after every major meeting or decision. Stale memory = stale outputs. 2 minutes of updating saves 20 minutes of re-explaining next time.</div>
+    </div>
+    <div class="card green">
+      <h3>Be specific in your prompts</h3>
+      <div class="card-desc">"Make me a deck" produces mediocre results. "Create a 6-slide SteerCo deck for 8 May with KPI overview, phased roadmap, RAID table, and actions slide" produces excellent results. Specificity is the lever.</div>
+    </div>
+    <div class="card green">
+      <h3>The compound effect is real</h3>
+      <div class="card-desc">Week 1: slow, frustrating, lots of corrections. Week 3: noticeably faster, fewer corrections. Week 6: 32 outputs in a single week. The investment in memory files and skills pays off exponentially over time.</div>
+    </div>
+    <div class="card green">
+      <h3>Do not try to replace your judgement</h3>
+      <div class="card-desc">Claude handles the admin, drafting, formatting, and data-pulling. You still make the decisions, set the strategy, and manage the relationships. The toolkit amplifies your capacity, it does not replace your expertise.</div>
+    </div>
+    <div class="card green">
+      <h3>Share early, get feedback</h3>
+      <div class="card-desc">I showed colleagues a generated deck after week 2. Their reactions ("wait, that's not hand-built?") validated the approach and gave me ideas for what to build next. Do not wait until it is perfect.</div>
+    </div>
+  </div>
+
+  <div class="callout warning" style="margin-top:20px;">
+    <strong>The biggest mistake I see people make:</strong> They try Claude once, get a generic output, and conclude "it does not work for my job." The difference between a generic output and a production-quality one is context. If you give Claude the same context you would give a new team member (who you are, what you are working on, what good looks like), the outputs transform. The first 30 minutes of setup is the barrier. Everything after that compounds.
+  </div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TAB: GETTING STARTED              -->
+<!-- ================================ -->
+<div class="tab-panel" id="tab-start">
+
+  <div class="section-title">Getting Started: Build Your Own Toolkit</div>
+  <p style="font-size:14px; color:var(--grey-800); margin-bottom:24px;">
+    You do not need to be technical to do this. I am not an engineer. Here is the path I would recommend, based on what worked for me:
+  </p>
+
+  <div class="card" style="border-left-color:var(--eg-navy); margin-bottom:24px;">
+    <h3>Prerequisites</h3>
+    <div class="card-detail">
+      <strong>1.</strong> Claude Code installed (ask IT or check the internal tooling channel)<br>
+      <strong>2.</strong> Node.js installed (Claude Code needs this to run)<br>
+      <strong>3.</strong> ~30 minutes for initial setup<br>
+      <strong>4.</strong> A willingness to iterate: your first outputs will not be perfect, but they improve fast
+    </div>
+  </div>
+
+  <div class="section-title">The 5-step path</div>
+  <div class="card" style="border-left-color:var(--eg-navy);">
+    <ul class="checklist">
+      <li>
+        <div class="check-num">1</div>
+        <div class="check-text">
+          <strong>Create your MEMORY.md</strong><br>
+          Start with the basics: your name, role, team, active programs, and key preferences (formatting rules, terminology, tools you use). This is the file Claude reads at the start of every session. It is the foundation for everything else.
+        </div>
+      </li>
+      <li>
+        <div class="check-num">2</div>
+        <div class="check-text">
+          <strong>Add one program context file</strong><br>
+          Pick your most active program. Create a markdown file with: program overview, current phase, key stakeholders, milestones, risks, and recent decisions. Claude will use this context to generate relevant, accurate outputs instead of generic ones.
+        </div>
+      </li>
+      <li>
+        <div class="check-num">3</div>
+        <div class="check-text">
+          <strong>Try your first dashboard or deck</strong><br>
+          Ask Claude to generate a Weekly Recap dashboard or a simple overview deck. The first attempt will need corrections. That is normal. Each correction teaches Claude your preferences, and you can save those as memory for next time.
+        </div>
+      </li>
+      <li>
+        <div class="check-num">4</div>
+        <div class="check-text">
+          <strong>Connect your tools (MCP)</strong><br>
+          Set up MCP connectors for Jira and Confluence (these have the most impact for PMs). Once connected, Claude can pull live data instead of you copying and pasting. Glean and Slack are valuable additions when you are ready.
+        </div>
+      </li>
+      <li>
+        <div class="check-num">5</div>
+        <div class="check-text">
+          <strong>Build your first custom command</strong><br>
+          Pick your most repetitive task (morning check-in, meeting prep, status report) and create a skill file for it. A skill is just a markdown file that tells Claude: what to do, what sources to check, and what format to output. Once saved, you trigger it with a slash command.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section-title" style="margin-top:32px;">Common questions</div>
+  <div class="card-grid two-col">
+    <div class="card navy">
+      <h3>Do I need to know how to code?</h3>
+      <div class="card-desc">No. I am not an engineer. Claude writes the code (Python for decks, HTML/CSS/JS for dashboards). You describe what you want in plain English. That said, over time you will start to understand what is happening under the hood, and that helps you ask for more precise things.</div>
+    </div>
+    <div class="card navy">
+      <h3>How long does setup take?</h3>
+      <div class="card-desc">The basic setup (MEMORY.md + one program file) takes about 30 minutes. After that, it is incremental: you add memory files as needs arise. Within a week of normal use, you will have a solid foundation. Within a month, it becomes genuinely hard to work without it.</div>
+    </div>
+    <div class="card navy">
+      <h3>Is it safe to use with program data?</h3>
+      <div class="card-desc">Follow the same data handling policies you use for any tool. Memory files are stored locally on your machine. MCP connectors use your existing authentication (SSO). Claude does not retain data between sessions beyond what is in your local memory files.</div>
+    </div>
+    <div class="card navy">
+      <h3>What if the output is wrong?</h3>
+      <div class="card-desc">It will be sometimes, especially early on. Treat Claude like a very fast junior PM: it needs context and corrections. The key is that corrections become permanent via memory files. You teach it once, and it remembers for every future session.</div>
+    </div>
+    <div class="card navy">
+      <h3>Can I share my memory files with colleagues?</h3>
+      <div class="card-desc">Absolutely. Template files (like the EG PowerPoint design system) are fully shareable. Program context files would need to be adapted. The skill files (commands) are also shareable and reusable across team members.</div>
+    </div>
+    <div class="card navy">
+      <h3>What is the biggest ROI?</h3>
+      <div class="card-desc">For me: PowerPoint generation (hours saved per week), meeting prep (better prepared, less anxiety), and the morning pulse (never miss an overdue action). Your mileage will vary depending on where you spend the most time on admin.</div>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-top:24px;">
+    <strong>Want help getting started?</strong> I am happy to walk anyone through the setup or share my template files as a starting point. The hardest part is the first 30 minutes. After that, it builds on itself.
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  My PM Toolkit | Fateha Khanom | TPA Commercial Operations | Built with Claude Code | April 2026
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- WEEKLY RECAP MODAL -->
+<div class="modal-overlay" id="modal-recap">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Weekly Recap Dashboard</h2><div class="modal-sub">Auto-generated every Monday morning</div></div>
+    <button class="modal-close" onclick="closeModal('modal-recap')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header navy">Weekly Recap | 27 April 2026</div>
+      <div class="mp-tabs">
+        <div class="mp-tab active">Overview</div>
+        <div class="mp-tab">Hotel Comp on Fees</div>
+        <div class="mp-tab">New Horizon</div>
+        <div class="mp-tab">Team &amp; General</div>
+      </div>
+      <div class="mp-body">
+        <div class="mini-preview" style="border:1px solid var(--grey-200); margin-bottom:10px;">
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:10px;">
+            <div class="mp-card"><div class="mp-val">8</div><div class="mp-lbl">Meetings</div></div>
+            <div class="mp-card"><div class="mp-val">12</div><div class="mp-lbl">Actions</div></div>
+            <div class="mp-card"><div class="mp-val">2</div><div class="mp-lbl">Programs Active</div></div>
+            <div class="mp-card"><div class="mp-val">3</div><div class="mp-lbl">Docs Updated</div></div>
+          </div>
+        </div>
+        <div class="mp-section">Actions Tracker</div>
+        <table class="mp-table">
+          <tr><th>Action</th><th>Owner</th><th>Due</th><th>Status</th></tr>
+          <tr><td>Circulate SteerCo pre-read</td><td>Fateha</td><td>6 May</td><td><span class="mp-rag green">ON TRACK</span></td></tr>
+          <tr><td>Legal review sign-off</td><td>Andrew</td><td>2 May</td><td><span class="mp-rag amber">CHASING</span></td></tr>
+          <tr><td>Partner comms draft</td><td>Aanchal</td><td>30 Apr</td><td><span class="mp-rag red">OVERDUE</span></td></tr>
+        </table>
+        <div class="mp-section">Education / Insights</div>
+        <ul class="mp-bullets">
+          <li><strong>From WG #2:</strong> Success metric confirmed as Actual Incremental Compensation on Fees</li>
+          <li><strong>From Legal sync:</strong> Contract amendment needed only for mandatory fee models (Phase 1c)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How to trigger</h4>
+      <div class="modal-prompt"><span class="slash">weekly recap</span></div>
+      <p>Or it generates automatically on Monday mornings if you set up the preference in MEMORY.md.</p>
+    </div>
+    <div class="modal-section">
+      <h4>What it pulls from</h4>
+      <ul>
+        <li><strong>Glean:</strong> Past week's meetings, document edits, Slack threads</li>
+        <li><strong>Jira:</strong> Ticket status changes, new issues</li>
+        <li><strong>Memory files:</strong> Program context for tab grouping, action ownership</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PROGRAM PULSE MODAL -->
+<div class="modal-overlay" id="modal-pulse">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Program Pulse</h2><div class="modal-sub">Daily morning briefing</div></div>
+    <button class="modal-close" onclick="closeModal('modal-pulse')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header green">Program Pulse | Tuesday 29 April 2026</div>
+      <div class="mp-body">
+        <div style="background:#ffebee; border-left:3px solid #d32f2f; padding:8px 12px; border-radius:0 6px 6px 0; margin-bottom:10px; font-size:10px;">
+          <strong style="color:#d32f2f;">1 OVERDUE</strong> - Partner comms draft (Aanchal) was due 30 Apr
+        </div>
+        <div style="background:#fff3e0; border-left:3px solid #e65100; padding:8px 12px; border-radius:0 6px 6px 0; margin-bottom:10px; font-size:10px;">
+          <strong style="color:#e65100;">DUE THIS WEEK</strong> - Legal sign-off (2 May), Send Kamal bundling list (2 May)
+        </div>
+        <div class="mp-section">Today's Priorities</div>
+        <ul class="mp-bullets">
+          <li>Send Aanchal body copy feedback email</li>
+          <li>Follow up with Andrew on legal review</li>
+          <li>Review SteerCo deck draft v2</li>
+        </ul>
+        <div class="mp-section">Upcoming This Week</div>
+        <ul class="mp-bullets">
+          <li><strong>Wed 30 Apr:</strong> WG #3 session</li>
+          <li><strong>Thu 1 May:</strong> Kamal catch-up</li>
+          <li><strong>Fri 2 May:</strong> Legal review deadline</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How to trigger</h4>
+      <div class="modal-prompt"><span class="slash">/pulse</span></div>
+      <p>Checks memory files first (zero cost on quiet mornings). Only calls Jira/Glean if blockers or overdue items are detected.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ACTION TRACKER MODAL -->
+<div class="modal-overlay" id="modal-tracker">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Action Tracker Dashboard</h2><div class="modal-sub">Interactive, persistent, no backend</div></div>
+    <button class="modal-close" onclick="closeModal('modal-tracker')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header blue">Action Tracker | Fateha Khanom</div>
+      <div class="mp-tabs">
+        <div class="mp-tab active">Overview</div>
+        <div class="mp-tab">Hotel Comp on Fees</div>
+        <div class="mp-tab">New Horizon</div>
+        <div class="mp-tab">Week Ahead</div>
+        <div class="mp-tab">Completed</div>
+      </div>
+      <div class="mp-body">
+        <div style="display:flex; gap:8px; margin-bottom:10px; font-size:10px;">
+          <span style="padding:3px 10px; border-radius:12px; background:var(--eg-dark); color:white; font-weight:600;">All</span>
+          <span style="padding:3px 10px; border-radius:12px; border:1px solid var(--grey-300); color:var(--grey-600);">Open</span>
+          <span style="padding:3px 10px; border-radius:12px; border:1px solid var(--grey-300); color:var(--grey-600);">In Progress</span>
+          <span style="padding:3px 10px; border-radius:12px; border:1px solid #d32f2f; color:#d32f2f;">Blockers</span>
+        </div>
+        <table class="mp-table">
+          <tr><th></th><th>Action</th><th>Program</th><th>Due</th><th>Priority</th><th>Status</th></tr>
+          <tr><td><input type="checkbox" disabled></td><td>Circulate SteerCo pre-read</td><td>Hotel Comp</td><td>6 May</td><td><span class="mp-rag green">MED</span></td><td>Open</td></tr>
+          <tr><td><input type="checkbox" disabled></td><td>Legal review chase</td><td>Hotel Comp</td><td>2 May</td><td><span class="mp-rag red">HIGH</span></td><td>In Progress</td></tr>
+          <tr><td><input type="checkbox" disabled></td><td>Update workback schedule</td><td>Hotel Comp</td><td>5 May</td><td><span class="mp-rag amber">MED</span></td><td>Open</td></tr>
+        </table>
+        <div style="font-size:9px; color:var(--grey-600); margin-top:8px; font-style:italic;">Click any action text or date to edit inline. Checkbox + DONE to complete. All state saved in localStorage.</div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Key features</h4>
+      <ul>
+        <li><strong>Inline editing:</strong> Click action text or due dates to edit directly</li>
+        <li><strong>Filters:</strong> Status, owner (me/others), priority, show/hide completed</li>
+        <li><strong>Persistence:</strong> All state saved in browser localStorage, no backend needed</li>
+        <li><strong>Undo:</strong> Toast notifications with undo for deletions and completions</li>
+        <li><strong>Week Ahead tab:</strong> Day-by-day cards (Mon-Fri) with key items per day</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h4>How to trigger</h4>
+      <div class="modal-prompt"><span class="slash">/update-tracker</span></div>
+      <p>Reads latest actions from meetings, Slack, and Jira, then updates the HTML file and opens it in your browser.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PROGRAM DASHBOARD MODAL -->
+<div class="modal-overlay" id="modal-progdash">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Program-Specific Dashboard</h2><div class="modal-sub">On-demand, single-page deep dive</div></div>
+    <button class="modal-close" onclick="closeModal('modal-progdash')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header purple">Hotel Comp on Fees | Program Dashboard | 27 Apr 2026</div>
+      <div class="mp-body">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;">
+          <div class="mp-card"><div class="mp-val">$96M</div><div class="mp-lbl">Annual RMD</div></div>
+          <div class="mp-card"><div class="mp-val" style="color:var(--green);">ON TRACK</div><div class="mp-lbl">RAG Status</div></div>
+          <div class="mp-card"><div class="mp-val">3</div><div class="mp-lbl">Phases</div></div>
+          <div class="mp-card"><div class="mp-val">Jun 26</div><div class="mp-lbl">Next Milestone</div></div>
+        </div>
+        <div class="mp-section">Recent Meetings (2 weeks)</div>
+        <ul class="mp-bullets">
+          <li><strong>23 Apr:</strong> WG #2, success metric confirmed</li>
+          <li><strong>22 Apr:</strong> Legal sync with Andrew, contract review</li>
+          <li><strong>16 Apr:</strong> WG Kick-off, workstream assignments</li>
+        </ul>
+        <div class="mp-section">Key Risks</div>
+        <table class="mp-table">
+          <tr><th>Risk</th><th>Impact</th><th>RAG</th><th>Owner</th></tr>
+          <tr><td>Legal review delay</td><td>Could push 1a date</td><td><span class="mp-rag amber">MED</span></td><td>Andrew</td></tr>
+          <tr><td>Partner comms readiness</td><td>Launch quality</td><td><span class="mp-rag amber">MED</span></td><td>Aanchal</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How to trigger</h4>
+      <div class="modal-prompt"><span class="slash">all things Hotel Comp on Fees</span></div>
+      <p>Works for any program you have a memory file for. Just say "all things [program name]".</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- COMMS PATHWAY MODAL -->
+<div class="modal-overlay" id="modal-comms">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Communication Pathway</h2><div class="modal-sub">Interactive stakeholder comms map</div></div>
+    <button class="modal-close" onclick="closeModal('modal-comms')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header orange">Hotel Comp on Fees | Communication Pathway | 28 Apr 2026</div>
+      <div class="mp-tabs">
+        <div class="mp-tab active">Overview</div>
+        <div class="mp-tab">Phase Detail</div>
+        <div class="mp-tab">Swimlane</div>
+        <div class="mp-tab">PR &amp; Crisis</div>
+        <div class="mp-tab">Stakeholders</div>
+        <div class="mp-tab">Risks</div>
+      </div>
+      <div class="mp-body">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px;">
+          <div class="mp-card"><div class="mp-val">$96M</div><div class="mp-lbl">Total RMD</div></div>
+          <div class="mp-card"><div class="mp-val">3</div><div class="mp-lbl">Phases</div></div>
+          <div class="mp-card"><div class="mp-val">22</div><div class="mp-lbl">Stakeholders</div></div>
+          <div class="mp-card"><div class="mp-val">Fateha</div><div class="mp-lbl">Comms Lead</div></div>
+        </div>
+        <div class="mp-section">Interactive Timeline</div>
+        <div style="display:flex; gap:4px; margin-bottom:8px;">
+          <div style="flex:3; background:linear-gradient(90deg,#1b5e20,var(--green)); border-radius:6px; padding:6px 10px; color:white; font-size:10px; font-weight:700;">Phase 1a: Flat Fees</div>
+          <div style="flex:3; background:linear-gradient(90deg,#bf360c,var(--orange)); border-radius:6px; padding:6px 10px; color:white; font-size:10px; font-weight:700;">Phase 1b: Tax Models</div>
+          <div style="flex:4; background:linear-gradient(90deg,#b71c1c,#d32f2f); border-radius:6px; padding:6px 10px; color:white; font-size:10px; font-weight:700;">Phase 1c: Mandatory</div>
+        </div>
+        <div class="mp-section">Stakeholder Groups</div>
+        <table class="mp-table">
+          <tr><th>Group</th><th>Key Contact</th><th>Channel</th><th>Cadence</th></tr>
+          <tr><td>Executive Sponsors</td><td>Kamal, Brandon</td><td>SteerCo</td><td>Monthly</td></tr>
+          <tr><td>Partner Comms (PMM)</td><td>Aanchal, Brooke</td><td>Working Group</td><td>Bi-weekly</td></tr>
+          <tr><td>Legal</td><td>Andrew</td><td>1:1 + Email</td><td>As needed</td></tr>
+          <tr><td>Finance</td><td>Amy Leung</td><td>1:1</td><td>Monthly</td></tr>
+        </table>
+        <div class="mp-section">Swimlane Preview</div>
+        <div style="font-size:10px; color:var(--grey-600); font-style:italic;">Full swimlane view shows message flow across: Executive, GTM, Partner Comms, Legal, Finance, Engineering, each mapped to phases and milestones.</div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>What makes this special</h4>
+      <ul>
+        <li><strong>Clickable timeline:</strong> Click any phase bar to expand details (key messages, audiences, milestones)</li>
+        <li><strong>Swimlane view:</strong> Visual grid showing who communicates what, when, across all workstreams</li>
+        <li><strong>PR &amp; Crisis tab:</strong> Escalation chains, crisis contacts, pre-approved messaging</li>
+        <li><strong>Stakeholder filters:</strong> Filter the 22-person stakeholder table by group, phase, or engagement type</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h4>How to create one for your program</h4>
+      <div class="modal-prompt">Create a communication pathway dashboard for [your program]. Include stakeholder groups, phase-specific messaging, a swimlane view, and escalation routes.</div>
+      <p>Claude will pull stakeholders from your program memory file and structure the comms map around your phases.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STATUS REPORT MODAL -->
+<div class="modal-overlay" id="modal-status">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Bi-Weekly Status Report</h2><div class="modal-sub">CO Portfolio template format</div></div>
+    <button class="modal-close" onclick="closeModal('modal-status')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header yellow">Hotel Comp on Fees | Status Report | 27 April 2026</div>
+      <div class="mp-body">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; font-size:10px;">
+          <div><strong>GROW Priority:</strong> Rewarding Partnerships</div>
+          <div><strong>TPA Initiative:</strong> Evolved Commercial Models</div>
+          <div><strong>KPI:</strong> $20.5M RMD via comp model change, by Q4 2026</div>
+          <div><strong>Health:</strong> <span class="mp-rag amber">AT RISK</span> &gt;&gt;&gt; <span class="mp-rag green">ON TRACK</span></div>
+        </div>
+        <div class="mp-section">1. Headlines: LT Need to Know</div>
+        <p style="font-size:10px; background:white; padding:8px; border-radius:4px; border-left:3px solid var(--eg-navy);">Phase 1a rollout confirmed for mid-June 2026. SteerCo #1 on 8 May will approve final timeline. Legal review on track for sign-off by 2 May.</p>
+        <div class="mp-section">3. Last 4 Weeks</div>
+        <ul class="mp-bullets">
+          <li>Working Group established with bi-weekly cadence (16 Apr kick-off)</li>
+          <li>Success metric confirmed: Actual Incremental Compensation on Fees (Amy Leung)</li>
+          <li>Legal review initiated, contract amendment scope defined</li>
+        </ul>
+        <div class="mp-section">4. Next 4 Weeks</div>
+        <ul class="mp-bullets">
+          <li><strong>2 May:</strong> Legal review sign-off complete</li>
+          <li><strong>8 May:</strong> SteerCo #1, approve Phase 1a timeline</li>
+          <li><strong>Mid-May:</strong> Partner comms draft finalised</li>
+        </ul>
+        <div class="mp-section">5. Key Risks &amp; Issues</div>
+        <table class="mp-table">
+          <tr><th>RAG</th><th>Description</th><th>Impact</th><th>Mitigation</th></tr>
+          <tr><td><span class="mp-rag amber">MED</span></td><td>Legal review timing</td><td>Could delay 1a launch</td><td>Weekly chase, escalate if no sign-off by 5 May</td></tr>
+          <tr><td><span class="mp-rag amber">MED</span></td><td>Partner comms readiness</td><td>Launch quality risk</td><td>PMM engaged, draft in review</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Template sections (CO Portfolio standard)</h4>
+      <ul>
+        <li><strong>Header:</strong> Program name, GROW priority, TPA initiative, KPIs, PM, sponsor, dates, phase, health</li>
+        <li><strong>1. Headlines:</strong> Tweet-style, 1-2 lines max. Context for RAG status.</li>
+        <li><strong>2. Path to Green:</strong> Only if Amber/Red. Owner + timeline for each item.</li>
+        <li><strong>3. Last 4 weeks:</strong> Outcomes achieved (not activities). Max 3-4 bullets with business value.</li>
+        <li><strong>4. Next 4 weeks:</strong> Concrete deliverables with specific dates. Max 3-4 bullets.</li>
+        <li><strong>5. Key Risks:</strong> Top 3. RAG, description, impact to deliverables, mitigation, owner.</li>
+        <li><strong>6. Key Milestones:</strong> Rolling year, quarterly, with RAG and original dates if delayed.</li>
+      </ul>
+    </div>
+    <div class="modal-section">
+      <h4>How to trigger</h4>
+      <div class="modal-prompt"><span class="slash">/status-report</span></div>
+      <p>Pulls latest program state from memory + Jira and formats to the exact CO Portfolio template. RAG definitions are built in.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ PPTX SLIDE PREVIEW MODALS ============ -->
+
+<!-- KPI / OVERVIEW SLIDE MODAL -->
+<div class="modal-overlay" id="modal-slide-kpi">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Slide Preview: Objectives / Overview</h2><div class="modal-sub">KPI cards + bullet summary</div></div>
+    <button class="modal-close" onclick="closeModal('modal-slide-kpi')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div style="background:var(--grey-100); border-radius:10px; padding:4px; margin-bottom:16px;">
+      <div style="background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); aspect-ratio:16/9; padding:0;">
+        <!-- Title bar -->
+        <div style="background:var(--eg-navy); padding:10px 20px; color:white; font-weight:700; font-size:13px;">1&nbsp;&nbsp;&nbsp;Program Overview</div>
+        <div style="padding:16px 20px;">
+          <!-- KPI Cards row -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px;">
+            <div style="background:#e8f0fe; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:var(--eg-navy);">$96M</div>
+              <div style="font-size:9px; color:var(--grey-600);">Annual RMD</div>
+            </div>
+            <div style="background:#e8f0fe; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:var(--eg-blue);">3</div>
+              <div style="font-size:9px; color:var(--grey-600);">Phases</div>
+            </div>
+            <div style="background:#e8f0fe; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:var(--green);">Mid-Jun</div>
+              <div style="font-size:9px; color:var(--grey-600);">Phase 1a Target</div>
+            </div>
+            <div style="background:#e8f0fe; border-radius:6px; padding:10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:var(--orange);">$20.5M</div>
+              <div style="font-size:9px; color:var(--grey-600);">2026 In-Year RMD</div>
+            </div>
+          </div>
+          <!-- Bullet content -->
+          <div style="font-size:10px; color:var(--grey-800); line-height:1.7;">
+            <div style="font-size:11px; font-weight:700; color:var(--eg-navy); margin-bottom:4px;">Objective</div>
+            <ul style="padding-left:16px; margin:0;">
+              <li>Implement compensation on fees across hotel partners in three phased rollouts</li>
+              <li>Phase 1a (Flat Fee): mid-June 2026 | Phase 1b (Tax): end-July | Phase 1c (Mandatory): September</li>
+              <li>Net of 30% haircut applied to all RMD projections</li>
+            </ul>
+            <div style="font-size:11px; font-weight:700; color:var(--eg-navy); margin:8px 0 4px;">Governance</div>
+            <ul style="padding-left:16px; margin:0;">
+              <li>SteerCo: Monthly (next: 8 May) | Working Group: Bi-weekly | PMM Sync: Weekly</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How this slide is built</h4>
+      <p>4x KPI metric cards positioned at fixed x-coordinates (0.5, 3.58, 6.66, 9.74 inches). Each card is a rounded rectangle with #E8F0FE fill. Values are 22pt bold, colour-coded by category. Below: bullet list with section headers. All using Centra No2 font from EG template.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TIMELINE SLIDE MODAL -->
+<div class="modal-overlay" id="modal-slide-timeline">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Slide Preview: Timeline / Roadmap</h2><div class="modal-sub">Phase badges + milestone table</div></div>
+    <button class="modal-close" onclick="closeModal('modal-slide-timeline')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div style="background:var(--grey-100); border-radius:10px; padding:4px; margin-bottom:16px;">
+      <div style="background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); aspect-ratio:16/9; padding:0;">
+        <div style="background:var(--eg-navy); padding:10px 20px; color:white; font-weight:700; font-size:13px;">5&nbsp;&nbsp;&nbsp;Phased Roadmap</div>
+        <div style="padding:16px 20px;">
+          <!-- Phase badges -->
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:14px;">
+            <div style="background:var(--green); color:white; border-radius:6px; padding:8px 16px; flex:1; text-align:center;">
+              <div style="font-size:11px; font-weight:700;">PHASE 1a</div>
+              <div style="font-size:9px; opacity:0.8;">Flat Fees | Mid-Jun 2026</div>
+            </div>
+            <div style="color:var(--grey-300); font-weight:700;">&gt;</div>
+            <div style="background:var(--eg-blue); color:white; border-radius:6px; padding:8px 16px; flex:1; text-align:center;">
+              <div style="font-size:11px; font-weight:700;">PHASE 1b</div>
+              <div style="font-size:9px; opacity:0.8;">Tax Models | End-Jul 2026</div>
+            </div>
+            <div style="color:var(--grey-300); font-weight:700;">&gt;</div>
+            <div style="background:var(--grey-600); color:white; border-radius:6px; padding:8px 16px; flex:1; text-align:center;">
+              <div style="font-size:11px; font-weight:700;">PHASE 1c</div>
+              <div style="font-size:9px; opacity:0.8;">Mandatory | Sep 2026</div>
+            </div>
+          </div>
+          <!-- Milestone table -->
+          <table style="width:100%; border-collapse:collapse; font-size:9px;">
+            <tr style="background:var(--eg-dark); color:white;">
+              <th style="padding:5px 8px; text-align:left;">Milestone</th>
+              <th style="padding:5px 8px;">Phase</th>
+              <th style="padding:5px 8px;">Date</th>
+              <th style="padding:5px 8px;">RAG</th>
+            </tr>
+            <tr><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200);">SteerCo #1 Approval</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">All</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">8 May</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;"><span style="background:var(--green); color:white; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">ON TRACK</span></td></tr>
+            <tr style="background:var(--grey-50);"><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200);">Partner Comms Sent</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">1a</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">2 Jun</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;"><span style="background:#f9a825; color:#333; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">AT RISK</span></td></tr>
+            <tr><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200);">Phase 1a Go-Live</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">1a</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;">Mid-Jun</td><td style="padding:4px 8px; border-bottom:1px solid var(--grey-200); text-align:center;"><span style="background:var(--green); color:white; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">ON TRACK</span></td></tr>
+            <tr style="background:var(--grey-50);"><td style="padding:4px 8px;">Phase 1b Go-Live</td><td style="padding:4px 8px; text-align:center;">1b</td><td style="padding:4px 8px; text-align:center;">End-Jul</td><td style="padding:4px 8px; text-align:center;"><span style="background:var(--grey-600); color:white; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">FUTURE</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How this slide is built</h4>
+      <p>Phase badges are rounded rectangles (2.2in x 0.7in) with colour coding: green = completed/current, blue = next, grey = future. Connected by ">" characters. Below: full-width milestone table with RAG status badges. All positioned programmatically via python-pptx.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RAID SLIDE MODAL -->
+<div class="modal-overlay" id="modal-slide-raid">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Slide Preview: Risks & Issues</h2><div class="modal-sub">RAID table with severity badges</div></div>
+    <button class="modal-close" onclick="closeModal('modal-slide-raid')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div style="background:var(--grey-100); border-radius:10px; padding:4px; margin-bottom:16px;">
+      <div style="background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); aspect-ratio:16/9; padding:0;">
+        <div style="background:var(--eg-navy); padding:10px 20px; color:white; font-weight:700; font-size:13px;">9&nbsp;&nbsp;&nbsp;Key Risks &amp; Issues</div>
+        <div style="padding:16px 20px;">
+          <table style="width:100%; border-collapse:collapse; font-size:9px;">
+            <tr style="background:var(--eg-dark); color:white;">
+              <th style="padding:5px 6px; text-align:left;">ID</th>
+              <th style="padding:5px 6px; text-align:left;">Risk / Issue</th>
+              <th style="padding:5px 6px;">Severity</th>
+              <th style="padding:5px 6px; text-align:left;">Impact</th>
+              <th style="padding:5px 6px; text-align:left;">Mitigation</th>
+              <th style="padding:5px 6px;">Owner</th>
+            </tr>
+            <tr><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">R-01</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">Legal review delay</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200); text-align:center;"><span style="background:#f9a825; color:#333; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">MEDIUM</span></td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">Could push 1a launch date</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">Weekly chase, escalate by 5 May</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200); text-align:center;">Andrew</td></tr>
+            <tr style="background:var(--grey-50);"><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">R-02</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">Partner comms readiness</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200); text-align:center;"><span style="background:#f9a825; color:#333; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">MEDIUM</span></td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">Poor launch comms quality</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200);">PMM engaged, draft in review</td><td style="padding:5px 6px; border-bottom:1px solid var(--grey-200); text-align:center;">Aanchal</td></tr>
+            <tr><td style="padding:5px 6px;">I-01</td><td style="padding:5px 6px;">HEP 79 partner scope change</td><td style="padding:5px 6px; text-align:center;"><span style="background:var(--green); color:white; padding:1px 6px; border-radius:6px; font-size:8px; font-weight:700;">LOW</span></td><td style="padding:5px 6px;">Bundled into 1b, no 1a impact</td><td style="padding:5px 6px;">Confirmed with Kamal 24 Apr</td><td style="padding:5px 6px; text-align:center;">Fateha</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>How this slide is built</h4>
+      <p>Full-width table with navy header row. Severity column uses colour-coded rounded-rect badges (green/amber/red). Alternating row shading. Cell borders #E0E0E0. All generated from program risk data stored in the memory file.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ MEETING TOOL MODALS ============ -->
+
+<!-- MEETING PREP MODAL -->
+<div class="modal-overlay" id="modal-meeting-prep">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Meeting Brief</h2><div class="modal-sub">/meeting-prep</div></div>
+    <button class="modal-close" onclick="closeModal('modal-meeting-prep')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header green">Meeting Brief | Kamal Sync | 1 May 2026</div>
+      <div class="mp-body">
+        <div class="mp-section">Attendees</div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <div style="background:white; border-radius:6px; padding:6px 10px; font-size:10px; border:1px solid var(--grey-200); flex:1;"><strong>Kamal</strong><br>Sr Dir, Partner Solutions<br><span style="color:var(--grey-600);">Decision-maker on rollout dates</span></div>
+          <div style="background:white; border-radius:6px; padding:6px 10px; font-size:10px; border:1px solid var(--grey-200); flex:1;"><strong>Fateha</strong><br>Program Manager<br><span style="color:var(--grey-600);">Presenting timeline update</span></div>
+        </div>
+        <div class="mp-section">Context</div>
+        <ul class="mp-bullets">
+          <li>Last met 24 Apr: discussed bundling exercise and Phase 1a date</li>
+          <li>Kamal confirmed 29 May is off the table, mid-June 2026 target</li>
+          <li>Awaiting Kamal's feedback on program bundling list</li>
+        </ul>
+        <div class="mp-section">Talking Points</div>
+        <ul class="mp-bullets">
+          <li><strong>1.</strong> Confirm mid-June date is holding after SteerCo feedback</li>
+          <li><strong>2.</strong> Review bundling list: which other programs go to market in June-Aug?</li>
+          <li><strong>3.</strong> Discuss HEP 79 partners being bundled into Phase 1b</li>
+        </ul>
+        <div class="mp-section">Open Actions (this stakeholder)</div>
+        <ul class="mp-bullets">
+          <li>Send bundling list to Brandon/Michelle/Spencer (Kamal, due 2 May)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/meeting-prep</span> Kamal sync on Phase 1a timeline, Thursday</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CHASE MESSAGE MODAL -->
+<div class="modal-overlay" id="modal-chase">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Chase Message</h2><div class="modal-sub">/chase</div></div>
+    <button class="modal-close" onclick="closeModal('modal-chase')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header orange">Chase Draft | Legal Review Sign-off</div>
+      <div class="mp-body" style="font-size:11px;">
+        <p style="margin-bottom:8px;"><strong>To:</strong> Andrew (Legal)</p>
+        <p style="margin-bottom:8px;"><strong>Subject:</strong> Hotel Comp on Fees: Legal review sign-off needed by 2 May</p>
+        <div style="background:white; padding:10px; border-radius:6px; border:1px solid var(--grey-200);">
+          <p>Hi Andrew,</p>
+          <p style="margin:8px 0;">Hope you're well. Following up on the legal review for Hotel Comp on Fees, Phase 1a. We agreed on 22 April that the contract amendment scope would be confirmed by end of April.</p>
+          <p style="margin:8px 0;">We need sign-off by <strong>2 May</strong> to stay on track for the 8 May SteerCo, where the Phase 1a timeline goes for final approval. Any delay here risks pushing the mid-June rollout date.</p>
+          <p style="margin:8px 0;">Could you confirm status, or flag if you need anything from our side to unblock?</p>
+          <p>Thanks,<br>Fateha</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/chase</span> Legal review sign-off from Andrew, was due end of April</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ESCALATION BRIEF MODAL -->
+<div class="modal-overlay" id="modal-escalation">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Escalation Brief</h2><div class="modal-sub">/escalation-brief</div></div>
+    <button class="modal-close" onclick="closeModal('modal-escalation')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header orange">Escalation Brief | Phase 1a Date Risk</div>
+      <div class="mp-body">
+        <div class="mp-section">Issue Summary</div>
+        <p style="font-size:10px; background:#ffebee; padding:8px; border-radius:4px; border-left:3px solid #d32f2f;">Legal review for Phase 1a contract amendments has not been signed off. Original deadline: 30 April. Current status: in review, no confirmed completion date.</p>
+        <div class="mp-section">Impact</div>
+        <ul class="mp-bullets">
+          <li>SteerCo #1 (8 May) cannot approve final timeline without legal clearance</li>
+          <li>Mid-June rollout at risk of slipping to July (overlap with Phase 1b)</li>
+          <li>$20.5M in-year RMD impact if 1a delays compress 1b/1c timelines</li>
+        </ul>
+        <div class="mp-section">What Has Been Tried</div>
+        <ul class="mp-bullets">
+          <li>1:1 with Andrew on 22 Apr: scope agreed, deadline set</li>
+          <li>Follow-up email on 28 Apr: no response</li>
+        </ul>
+        <div class="mp-section">The Ask</div>
+        <p style="font-size:10px; background:white; padding:8px; border-radius:4px; border-left:3px solid var(--eg-navy);"><strong>Request Mohit/Kamal to escalate to Legal leadership</strong> for prioritised review. Target: sign-off by 5 May (3 days before SteerCo).</p>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/escalation-brief</span> Phase 1a legal review is overdue, need leadership escalation</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DECISION PAPER MODAL -->
+<div class="modal-overlay" id="modal-decision">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Decision Paper</h2><div class="modal-sub">/decision-paper</div></div>
+    <button class="modal-close" onclick="closeModal('modal-decision')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header blue">Decision Paper | Phase 1a Rollout Date</div>
+      <div class="mp-body">
+        <div class="mp-section">Problem Statement</div>
+        <p style="font-size:10px;">Original Phase 1a target of 29 May is no longer feasible. Engineering and GTM readiness require additional time. A revised date must be approved at SteerCo #1 (8 May).</p>
+        <div class="mp-section">Options</div>
+        <table class="mp-table">
+          <tr><th>Option</th><th>Date</th><th>Pros</th><th>Cons</th></tr>
+          <tr><td><strong>A: Mid-June</strong></td><td>16 Jun</td><td>Adequate GTM prep, legal cleared</td><td>4-week delay to RMD</td></tr>
+          <tr><td>B: Early June</td><td>2 Jun</td><td>Minimal delay</td><td>Compressed GTM, risk of poor launch</td></tr>
+          <tr><td>C: July</td><td>7 Jul</td><td>Maximum buffer</td><td>Overlaps 1b, $3M+ RMD loss</td></tr>
+        </table>
+        <div class="mp-section">Recommendation</div>
+        <p style="font-size:10px; background:var(--green-light); padding:8px; border-radius:4px; border-left:3px solid var(--green);"><strong>Option A: Mid-June 2026.</strong> Balances readiness with financial impact. Pro-rata RMD: $20.5M (net of 30% haircut).</p>
+        <div class="mp-section">Approval Required From</div>
+        <ul class="mp-bullets">
+          <li>Kamal (Partner Solutions)</li>
+          <li>SteerCo (8 May)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/decision-paper</span> Phase 1a rollout date change, options are mid-June, early June, or July</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- GRILL ME MODAL -->
+<div class="modal-overlay" id="modal-grill">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Grill Me</h2><div class="modal-sub">/grill-me - meeting rehearsal</div></div>
+    <button class="modal-close" onclick="closeModal('modal-grill')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header navy">Grill Session | SteerCo Prep | 8 May</div>
+      <div class="mp-body">
+        <div class="mp-section">Tough Questions You Might Face</div>
+        <div style="background:white; padding:8px; border-radius:6px; border-left:3px solid #d32f2f; margin-bottom:6px; font-size:10px;">
+          <strong style="color:#d32f2f;">Q: Why did the date slip from May to June?</strong>
+          <p style="margin-top:4px;">Suggested response: Engineering dependencies identified during detailed planning required 3 additional weeks. This was caught early in the planning phase rather than during execution...</p>
+        </div>
+        <div style="background:white; padding:8px; border-radius:6px; border-left:3px solid var(--orange); margin-bottom:6px; font-size:10px;">
+          <strong style="color:var(--orange);">Q: What is the financial impact of the delay?</strong>
+          <p style="margin-top:4px;">Pro-rata in-year RMD remains $20.5M. 2-week shift has minimal impact on annual figure because the haircut already accounts for ramp-up...</p>
+        </div>
+        <div style="background:white; padding:8px; border-radius:6px; border-left:3px solid var(--eg-blue); margin-bottom:6px; font-size:10px;">
+          <strong style="color:var(--eg-blue);">Q: How confident are you in mid-June?</strong>
+          <p style="margin-top:4px;">High confidence. Legal review on track for 2 May sign-off. Engineering sprint plan confirmed. GTM comms draft in review. Main dependency is...</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/grill-me</span> SteerCo presentation on 8 May, presenting Phase 1a timeline approval</div>
+      <p>Claude role-plays as tough stakeholders and asks the hardest questions you might face. Great for SteerCos, exec reviews, and any high-stakes meeting.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PRE-READ MODAL -->
+<div class="modal-overlay" id="modal-preread">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Working Group Pre-read</h2><div class="modal-sub">/wg-preread</div></div>
+    <button class="modal-close" onclick="closeModal('modal-preread')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header green">Hotel Comp on Fees | WG #3 Pre-read | 30 April 2026</div>
+      <div class="mp-body">
+        <div class="mp-section">Agenda</div>
+        <ul class="mp-bullets">
+          <li><strong>1.</strong> Review actions from WG #2 (23 Apr)</li>
+          <li><strong>2.</strong> Phase 1a comms plan: draft walkthrough</li>
+          <li><strong>3.</strong> Legal review status update</li>
+          <li><strong>4.</strong> SteerCo #1 (8 May) preparation and pre-read plan</li>
+        </ul>
+        <div class="mp-section">Decisions Needed</div>
+        <ul class="mp-bullets">
+          <li>Approve partner notification timeline (30 days or 45 days notice?)</li>
+          <li>Confirm SteerCo pre-read distribution list</li>
+        </ul>
+        <div class="mp-section">Progress Since Last Session</div>
+        <table class="mp-table">
+          <tr><th>Action</th><th>Owner</th><th>Status</th></tr>
+          <tr><td>Confirm success metric</td><td>Amy Leung</td><td><span class="mp-rag green">DONE</span></td></tr>
+          <tr><td>Draft partner comms copy</td><td>Aanchal</td><td><span class="mp-rag amber">IN PROGRESS</span></td></tr>
+          <tr><td>Legal scope review</td><td>Andrew</td><td><span class="mp-rag amber">IN PROGRESS</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/wg-preread</span></div>
+      <p>Automatically generates from latest program memory, Jira tickets, and previous meeting notes. Circulate the day before the session.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STAKEHOLDER BRIEF MODAL -->
+<div class="modal-overlay" id="modal-stakeholder">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Stakeholder Briefing</h2><div class="modal-sub">/stakeholder-brief</div></div>
+    <button class="modal-close" onclick="closeModal('modal-stakeholder')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header blue">Stakeholder Brief | Rachel Bird | HMP Lead</div>
+      <div class="mp-body">
+        <div class="mp-section">Program Summary</div>
+        <p style="font-size:10px;">Hotel Comp on Fees implements compensation on fees across hotel partners in three phases (1a/1b/1c), targeting $96M annual RMD. Currently in planning phase, Phase 1a go-live mid-June 2026.</p>
+        <div class="mp-section">Your Role</div>
+        <p style="font-size:10px;">As HMP Lead, Rachel is a key dependency for partner account management mapping and communication readiness for Phase 1a HEP partners.</p>
+        <div class="mp-section">Key Dates</div>
+        <ul class="mp-bullets">
+          <li><strong>8 May:</strong> SteerCo #1 (timeline approval)</li>
+          <li><strong>Mid-Jun:</strong> Phase 1a go-live</li>
+          <li><strong>End-Jul:</strong> Phase 1b (includes HEP 79 partners)</li>
+        </ul>
+        <div class="mp-section">Key Contacts</div>
+        <ul class="mp-bullets">
+          <li><strong>Program Manager:</strong> Fateha Khanom</li>
+          <li><strong>Executive Sponsor:</strong> Kamal</li>
+          <li><strong>PMM Lead:</strong> Aanchal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/stakeholder-brief</span> Rachel Bird, HMP lead, joining the Hotel Comp on Fees program</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- EXTRACT ACTIONS MODAL -->
+<div class="modal-overlay" id="modal-extract">
+<div class="modal">
+  <div class="modal-header">
+    <div><h2>Post-Meeting Action Extraction</h2><div class="modal-sub">/extract-actions</div></div>
+    <button class="modal-close" onclick="closeModal('modal-extract')">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="mini-preview">
+      <div class="mp-header purple">Actions Extracted | WG #2 | 23 April 2026</div>
+      <div class="mp-body">
+        <div class="mp-section">Action Items</div>
+        <table class="mp-table">
+          <tr><th>#</th><th>Action</th><th>Owner</th><th>Due</th></tr>
+          <tr><td>1</td><td>Finalise partner comms body copy</td><td>Aanchal</td><td>30 Apr</td></tr>
+          <tr><td>2</td><td>Send program bundling list to Kamal</td><td>Fateha</td><td>2 May</td></tr>
+          <tr><td>3</td><td>Confirm legal sign-off date</td><td>Andrew</td><td>28 Apr</td></tr>
+          <tr><td>4</td><td>Update workback schedule with new 1a date</td><td>Fateha</td><td>25 Apr</td></tr>
+        </table>
+        <div class="mp-section">Decisions Made</div>
+        <ul class="mp-bullets">
+          <li>Success metric: Actual Incremental Compensation on Fees (recommended by Amy Leung)</li>
+          <li>HEP 79 partners bundled into Phase 1b (not 1a)</li>
+        </ul>
+        <div class="mp-section">Items to Park</div>
+        <ul class="mp-bullets">
+          <li>Phase 1c certification requirements: defer to June deep-dive</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>Example prompt</h4>
+      <div class="modal-prompt"><span class="slash">/extract-actions</span> from today's WG call</div>
+      <p>Paste your rough notes and Claude extracts structured actions, decisions, and parked items. Outputs are ready to paste into the action tracker or Confluence.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+function jumpTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  var btns = document.querySelectorAll('.tab-btn');
+  var tabMap = {dashboards:1, decks:2, meetings:3, commands:4, playbook:5, secret:6, lessons:7, start:8, overview:0};
+  if (tabMap[id] !== undefined && btns[tabMap[id]]) btns[tabMap[id]].classList.add('active');
+  window.scrollTo(0, 0);
+}
+function copyCmd(el) {
+  var text = el.textContent.trim();
+  navigator.clipboard.writeText(text).then(function() {
+    var orig = el.style.outline;
+    el.style.outline = '2px solid #2e7d32';
+    var note = document.createElement('span');
+    note.textContent = ' Copied!';
+    note.style.cssText = 'color:#2e7d32; font-size:11px; font-weight:700; margin-left:8px;';
+    el.appendChild(note);
+    setTimeout(function() { el.style.outline = orig; if (note.parentNode) note.remove(); }, 1500);
+  });
+}
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', function(e) {
+    if (e.target === el) { el.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(el => {
+      el.classList.remove('open'); document.body.style.overflow = '';
+    });
+  }
+});
+</script>
+
+</body>
+</html>
