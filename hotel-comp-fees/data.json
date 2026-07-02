@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "name": "Hotel Comp on Fees",
+    "phase": "Active: 1A + 1B (1C to follow)",
+    "pm": "Fateha K",
+    "sponsor": "Steve Q",
+    "p1a": "Phase 1A - Flat fees. Compensation on flat-rate partner fees. Bundled with 1B for a single launch.",
+    "p1b": "Phase 1B - Fees as taxes. Compensation on fees loaded as taxes. Launched together with 1A as one narrative.",
+    "p1c": "Phase 1C - Mandatory fees. Compensation on mandatory partner fees. Kept separate from 1A/1B as a different narrative. Later timing.",
+    "objective": "Hotel Comp on Fees ensures EG is compensated across the range of hotel fees - flat fees, fees loaded as taxes, and mandatory fees - correcting gaps in what is currently collected. Delivered in phases: 1A and 1B are bundled corrections launching together; 1C follows as a separate narrative. Scope spans ~178,000 HMP and HEP properties. Target: $83.4M annualised RMD by 2027, measured as Net Program RMD - incremental comp minus lost RMD from attrition and BML degradation. Pilot 3 Aug, validation gate 5 Sep, full rollout 14 Sep 2026.",
+    "rag": "amber",
+    "ragReason": "Provider-chain dev dependency and HEP approval gate outstanding.",
+    "lastUpdated": "2 Jul 2026",
+    "publishedBy": "Fateha K",
+    "savedAt": "2026-07-02T19:00:00.000Z"
+  },
+  "milestones": [
+    { "id": 1, "name": "UAT Completion", "date": "2026-07-03", "phase": "1A", "owner": "Biviana", "status": "In Progress", "rag": "amber", "notes": "Started 4 May; extended due to booking availability issues" },
+    { "id": 2, "name": "Code Complete", "date": "2026-07-10", "phase": "1B", "owner": "Biviana", "status": "On Track", "rag": "green", "notes": "" },
+    { "id": 3, "name": "UAT Completion (starts 13 Jul)", "date": "2026-07-24", "phase": "1B", "owner": "Biviana", "status": "On Track", "rag": "green", "notes": "UAT starts 13 July" },
+    { "id": 4, "name": "TAM/CAM Assessment", "date": "2026-06-24", "phase": "1B", "owner": "Melissa BN", "status": "In Progress", "rag": "green", "notes": "Feedback collection from connectivity teams; awaiting CAM LT assessment" },
+    { "id": 5, "name": "Tech Go-Live Ready", "date": "2026-08-03", "phase": "1B", "owner": "Biviana", "status": "On Track", "rag": "green", "notes": "" },
+    { "id": 6, "name": "Partner Comms - Stakeholder Approval", "date": "2026-06-30", "phase": "All", "owner": "Fateha K", "status": "Complete", "rag": "green", "notes": "Golan and Steve have approved with feedback" },
+    { "id": 7, "name": "Pilot Success Criteria Confirmed", "date": "", "phase": "All", "owner": "Biviana / Tia P", "status": "In Progress", "rag": "amber", "notes": "Defining success roll-out to select the right pilot properties" },
+    { "id": 8, "name": "Provider Dev Scope Gate", "date": "2026-07-15", "phase": "All", "owner": "Martin R / Melissa BN", "status": "In Progress", "rag": "amber", "notes": "" },
+    { "id": 9, "name": "Properties signed off for Pilot", "date": "2026-07-20", "phase": "All", "owner": "Tia P", "status": "Not Started", "rag": "amber", "notes": "20 July (TBC) - ready from tech + comms?" },
+    { "id": 10, "name": "Pilot Roll Out", "date": "2026-08-03", "phase": "All", "owner": "Tia P / Biviana", "status": "Not Started", "rag": "amber", "notes": "Confirm if 2 weeks or 4" },
+    { "id": 11, "name": "Partner Comms - Audience List Confirmed/Mapping", "date": "", "phase": "All", "owner": "Tia P", "status": "Pending", "rag": "amber", "notes": "Pending Go-Live date confirmation" },
+    { "id": 12, "name": "Partner Comms - Hotel & Connectivity Comms Send Date", "date": "2026-08-03", "phase": "All", "owner": "Anna Rannells / Aanchal", "status": "Pending", "rag": "amber", "notes": "Pending Go-Live date confirmation" },
+    { "id": 13, "name": "Field Enablement Complete", "date": "2026-08-14", "phase": "All", "owner": "Jayce D", "status": "On Track", "rag": "green", "notes": "Internal FAQ & Weekly Digest (Jira)" },
+    { "id": 14, "name": "TPSP Readiness", "date": "2026-07-27", "phase": "All", "owner": "Fetie / Annalisa Pike", "status": "Pending", "rag": "amber", "notes": "GAIF; TPSP KB article (AEPIT)" },
+    { "id": 15, "name": "HPS Assessment Complete", "date": "", "phase": "All", "owner": "Hanna", "status": "Pending", "rag": "amber", "notes": "Involved in UAT for 1A and 1B" },
+    { "id": 16, "name": "PR & Crisis Communication Statement", "date": "", "phase": "All", "owner": "Mallorie / Ludivine", "status": "In Progress", "rag": "amber", "notes": "Crisis messaging & escalation protocols for partner pushback" },
+    { "id": 17, "name": "Validation & invoice gate", "date": "2026-09-05", "phase": "1A/1B", "owner": "Amy L", "status": "Upcoming", "rag": "amber", "notes": "Validation + Finance sign-off required before this date (kept from hub; not on canvas)" },
+    { "id": 18, "name": "Program Go-Live Date (1A + 1B)", "date": "2026-09-14", "phase": "1A/1B", "owner": "Fateha K", "status": "In Progress", "rag": "amber", "notes": "Full launch for 1A and 1B; pilot confirmed 3 Aug" }
+  ],
+  "workstreams": [
+    { "id": 1, "name": "Connectivity", "owner": "Martin R / Melissa BN (TAM)", "rag": "red", "status": "In Progress", "lastUpdate": "Provider outreach to 21 vendors underway; 15 Jul scope gate at risk", "nextAction": "Complete outreach by 15 Jul scope gate", "slack": "@maroy" },
+    { "id": 2, "name": "Commercial: HEP", "owner": "Ariel / Vero", "rag": "amber", "status": "In Progress", "lastUpdate": "Julie approval secured; aligning on engagement plan", "nextAction": "Align on HEP engagement plan (Thu 2 Jul)", "slack": "@arrobinson" },
+    { "id": 3, "name": "Commercial: HMP", "owner": "Rachel B", "rag": "amber", "status": "In Progress", "lastUpdate": "TBC — awaiting HMP commercial update", "nextAction": "Confirm HMP engagement plan and owner", "slack": "" },
+    { "id": 4, "name": "External Comms - Partner Comms (umbrella)", "owner": "Anne R", "rag": "amber", "status": "In Progress", "lastUpdate": "Umbrella comms draft signed off by leaders; now with partner comms team", "nextAction": "Provide updated partner list to partner comms team", "slack": "" },
+    { "id": 5, "name": "Internal Comms - TPSP, PPI, Field", "owner": "Annalisa P / Fetie D / Jayce (Field)", "rag": "amber", "status": "In Progress", "lastUpdate": "TBC — awaiting TPSP / PPI / Field update", "nextAction": "TPSP, Partner Process Improvement, Field Enablement alignment", "slack": "" },
+    { "id": 10, "name": "PR & Crisis", "owner": "Ludivine / Mallorie", "rag": "amber", "status": "In Progress", "lastUpdate": "PR/crisis readiness call held 30 Jun", "nextAction": "FAQ and holding statement by Wed 2 Jul", "slack": "" },
+    { "id": 6, "name": "Legal", "owner": "Andrew B", "rag": "green", "status": "In Progress", "lastUpdate": "1A/1B scope confirmed as hygiene - not 1C", "nextAction": "Monitor conditional charge exposure ($3M/1A)", "slack": "" },
+    { "id": 7, "name": "Finance", "owner": "Amy L", "rag": "green", "status": "In Progress", "lastUpdate": "1A $22.1M / 1B $22.4M indicative uplift confirmed", "nextAction": "Finance sign-off for invoice gate 5 Sep", "slack": "" },
+    { "id": 8, "name": "Analytics", "owner": "Christine E", "rag": "green", "status": "In Progress", "lastUpdate": "1A $22.1M / 1B $22.4M uplift validated", "nextAction": "Post-launch metrics baseline for 1A UAT", "slack": "" },
+    { "id": 9, "name": "P&T", "owner": "Biviana", "rag": "red", "status": "In Progress", "lastUpdate": "Short development and UAT window for 1B", "nextAction": "Confirm 1B code + UAT completion dates; protect UAT window", "slack": "" }
+  ],
+  "actions": [
+    { "id": 1, "action": "Outreach to 21 providers - connectivity scope gate", "owner": "Martin R / Melissa BN", "ws": "Connectivity", "due": "2026-07-15", "status": "In Progress", "notes": "White-glove tier; $11M of $22M 1A RMD" },
+    { "id": 2, "action": "Align on HEP engagement plan (Thursday)", "owner": "Ariel / Vero", "ws": "Commercial: HEP", "due": "2026-07-02", "status": "In Progress", "notes": "Julie approval secured; align on the plan Thu 2 Jul" },
+    { "id": 3, "action": "FAQ and holding statement for PR/crisis", "owner": "Ludivine / Mallorie", "ws": "PR & Crisis", "due": "2026-07-02", "status": "To Do", "notes": "Required before pilot launch" },
+    { "id": 5, "action": "Pilot property list (1A + 1B, post-connectivity issue)", "owner": "Biviana", "ws": "P&T", "due": "2026-07-03", "status": "In Progress", "notes": "Pilot list for 1A and 1B following connectivity issue; with Biviana" },
+    { "id": 6, "action": "HEP chain-to-vendor mapping", "owner": "Martin R", "ws": "Connectivity", "due": "2026-07-10", "status": "Done", "notes": "Completed by Martin R. Marriott/MARSHA, DerbySoft to Hilton/IHG/Best Western/Omni" },
+    { "id": 7, "action": "Provide updated partner list to partner comms team", "owner": "Fateha K", "ws": "External Comms - Partner Comms (umbrella)", "due": "2026-07-07", "status": "In Progress", "notes": "Umbrella comms draft signed off by leaders; now with partner comms team; we owe them an updated partner list" },
+    { "id": 8, "action": "Obtain specific charge conditions per chain from HEP/Legal", "owner": "Fateha K / Andrew B", "ws": "Legal / Finance", "due": "2026-07-08", "status": "To Do", "notes": "From 30 Jun HEP/Legal review. Prioritise Marriott / Hyatt / Four Seasons = $8.83M (93% of conditional value). Translate \"conditional yes\" into per-chain actions. EVT/Rydges + Highgate awaiting Account Team on commercial risk + SA comp % alignment." }
+  ],
+  "risks": [
+    { "id": 1, "risk": "Provider-chain dev dependency", "type": "Risk", "rag": "amber", "owner": "Martin R", "mitigation": "Phased/tiered rollout with 15 Jul scope gate; incentivisation under review", "status": "Open" },
+    { "id": 2, "risk": "HEP partner engagement and data integrity (65k+ properties in scope)", "type": "Risk", "rag": "amber", "owner": "Julie / Ariel / Vero", "mitigation": "Default-include unless contractual prohibition; validate data integrity for additional properties; HEP engagement sessions (Ariel/Vero); high-risk chains prioritised", "status": "Open" },
+    { "id": 3, "risk": "Double charging risk on invoices", "type": "Risk", "rag": "red", "owner": "Amy L", "mitigation": "Invoice gate 5 Sep; Finance review before rollout", "status": "Open" },
+    { "id": 4, "risk": "14 Sep full rollout at risk if 15 Jul gate missed", "type": "Risk", "rag": "red", "owner": "Fateha K", "mitigation": "Escalation to Steve Q (sponsor); tiered fallback strategy in place", "status": "Open" },
+    { "id": 5, "risk": "Partner pushback on fee changes", "type": "Risk", "rag": "amber", "owner": "Ludivine / Mallorie", "mitigation": "PR/crisis pack pre-built; holding statements before pilot launch", "status": "Open" },
+    { "id": 6, "risk": "Short development and UAT window for P&T (1B)", "type": "Risk", "rag": "red", "owner": "Biviana / Tia P", "mitigation": "Confirm 1B code + UAT completion dates (Tia P/Karan/Bogdan); 2-3 wks UAT after mid-July code; rollback capability confirmed for both components", "status": "Open" },
+    { "id": 7, "risk": "HEP chain charge-ability - 21 chains flagged in 30 Jun HEP/Legal review", "type": "Dependency", "rag": "amber", "owner": "Andrew B / Vero", "mitigation": "Cannot charge without agreement update: 6 chains (IHG, Minor, Mandarin Oriental, NH, Diamond, Omni), ~$0.6M combined (1A $0.05M / 1B $0.55M), ~2,884 props (volume mostly IHG, low value). Conditional yes: 15 chains, ~$9.45M combined (1A $3.0M / 1B $6.45M), 93% in Marriott/Hyatt/Four Seasons ($8.83M). Condition content pending from Legal. 1C not yet sized.", "status": "Open" }
+  ],
+  "decisions": [
+    { "id": 1, "date": "2026-05-08", "title": "Unified comms narrative + default-include partners", "forum": "SteerCo #1", "owner": "Steve Q", "detail": "Comms cover the full program (1A/1B/1C) as one narrative, not phase-by-phase. Default-include all partners unless a contractual prohibition exists (HEP and Vegas reviewed on that basis).", "status": "Confirmed" },
+    { "id": 2, "date": "2026-06-05", "title": "1A + 1B bundled as a single launch", "forum": "SteerCo #2", "owner": "Steve Q", "detail": "Both are hygiene corrections - one release, one comms narrative, one readiness cycle. EPF launches immediately without proactive comms. 1A/1B narrative kept separate from 1C (tax compliance vs contract rights).", "status": "Confirmed" },
+    { "id": 3, "date": "2026-06-05", "title": "Success metric = Net Program RMD", "forum": "SteerCo #2", "owner": "Fateha K", "detail": "Approved measure: Net Program RMD = Incremental Comp on Fees minus Lost RMD from attrition and BML degradation. Target $83.4M annualised by 2027.", "status": "Confirmed" },
+    { "id": 4, "date": "2026-06-23", "title": "Launch dates locked", "forum": "SteerCo #3 (async)", "owner": "Steve Q", "detail": "3 Aug pilot, 5 Sep validation gate, 14 Sep full rollout (1A+1B bundled), subject to pilot go/no-go.", "status": "Confirmed" },
+    { "id": 5, "date": "2026-06-26", "title": "Tiered provider rollout + 15 Jul scope gate", "forum": "Connectivity WG", "owner": "Martin R", "detail": "429 providers across 3 tiers (21 white-glove, 37 proactive, 371 long-tail). Top 21 outreach by 15 Jul scope gate (~$11M of $22M 1A RMD). If gate missed, 14 Sep at risk.", "status": "Confirmed" },
+    { "id": 6, "date": "2026-06-29", "title": "1A/1B legal scope confirmed as hygiene", "forum": "Legal review", "owner": "Andrew B", "detail": "1A/1B contract review is hygiene, not a blocker. 1C is separate. Identified chains unable to proceed (cannot-charge, negligible: $0.05M/1A, $0.55M/1B), plus a number of chains with conditional qualifiers still to be worked through.", "status": "Confirmed" },
+    { "id": 7, "date": "2026-06-30", "title": "PR/crisis pack required before pilot launch", "forum": "PR readiness call", "owner": "Ludivine / Mallorie", "detail": "Holding statements and FAQ pre-built before any partner comms go out. Kyle consult-only at this stage. FAQ due Wed 2 Jul.", "status": "Confirmed" }
+  ],
+  "steerco": [
+    { "id": 1, "date": "2026-05-08", "title": "SteerCo #1 - Program kickoff", "materials": "Program context and phase status; rollout options (1A/1B/1C); comms strategy; HEP inclusion approach. Chair: Fateha K, Sponsor: Steve Q", "decisions": "Confirmed: comms cover full program (1A/1B/1C) as one unified narrative, not phase-by-phase. Confirmed: default include all partners unless contractual prohibition (HEP and Vegas reviewed on that basis). Confirmed: follow-up SteerCo in 2-3 wks. Deferred: 1A go-live date (mid-June seen as ambitious); 1C option (lean Option B - non-connected Sep, connected Nov); success metric endorsement (must also capture negative impacts)", "actions": "Fateha K: schedule follow-up, share draft partner comms, present 1B/1C options with risk-reward scenarios, success metrics incl. negative impacts. Tia P: Booking.com fee exception analysis (Vegas + others). Kamal K: share payment change info with Rachel B. Rachel B / Julie: HEP inclusion + Vegas strategy", "status": "Complete" },
+    { "id": 2, "date": "2026-06-05", "title": "SteerCo #2", "materials": "Scope expansion 79 to 178,000 properties (ETP properties found); 1A+1B bundling debate; technical readiness (mid-July code, 2-3 wks UAT); Aug vs Sep launch (~$1.8M RMD / $1.6M GP per month delay); success metrics framework; 1C separate session", "decisions": "Confirmed: 1A and 1B bundled as single launch (both hygiene corrections, one comms narrative). Confirmed: proactive comms for bundle + connectivity provider comms in parallel. Confirmed: success metric = Net Program RMD (Incremental Comp on Fees minus Lost RMD from attrition and BML degradation). Confirmed: EPF launches immediately, no proactive comms. Confirmed: 1A/1B narrative kept separate from 1C. Deferred: go/no-go on Aug vs Sep (async email once readiness confirmed); 1C timing (smaller group - Mohit C/Steve Q/Golan/Julie/Joey)", "actions": "Fateha K: update deck with 1C figures, align success metrics (RMD vs supplier margin per Steve Q), send notes/recording. Kamal K: quantify Aug downside risk (Avail/BML/visibility booster) vs $1.8M upside. Tia P: launch EPF; confirm code/UAT dates; confirm 1B connectivity lead time and 60-day notice. Fateha K/Mohit C: validate data integrity for +65k properties. Mohit C: rollout plan options Aug vs Sep. Mohit C/Steve Q/Golan: final go/no-go async", "status": "Complete" },
+    { "id": 3, "date": "2026-06-23", "title": "SteerCo #3 - Async (email update)", "materials": "Commercial model email: Aug vs Sep launch - Aug $18.5M RMD / $16.7M GP, Sep $14.9M RMD / $13.4M GP; slip cost $3.6M RMD; peak-summer downside base $9.7M RMD; net base -$6.1M", "decisions": "14 Sep full rollout (1A+1B) on pilot go/no-go; 5 Sep validation gate; 3 Aug pilot", "actions": "Provider tiering (21 white-glove / 37 proactive / 371 long-tail); 15 Jul scope gate", "status": "Complete" },
+    { "id": 4, "date": "2026-09-14", "title": "SteerCo - Go-live gate (full rollout go/no-go)", "materials": "Comp uplift workbook (9-tab), 14 Sep risk paper, connectivity tiering", "decisions": "TBC - full rollout go/no-go for 1A + 1B", "actions": "Confirm 21-provider readiness; final RMD validation", "status": "Upcoming" }
+  ],
+  "meetings": [
+    { "id": 1, "date": "2026-06-30", "title": "PR & Crisis Readiness", "attendees": "Ludivine, Mallorie, Fateha K", "decisions": "FAQ and holding statement needed before partner outreach; Kyle consult-only at this stage", "actions": "Ludivine: FAQ by Wed 2 Jul; Fateha K: chase umbrella comms approval" },
+    { "id": 2, "date": "2026-06-26", "title": "Connectivity Working Group", "attendees": "Martin R, Melissa BN, Fateha K", "decisions": "Tiered provider rollout (21 white-glove / 37 proactive / 371 long-tail); 15 Jul scope gate; 14 Sep rollout at risk if missed", "actions": "Martin R: outreach to 21 providers by 15 Jul; Fateha K: comp uplift analysis" },
+    { "id": 3, "date": "2026-06-25", "title": "Program Working Group", "attendees": "Full WG", "decisions": "21 providers confirmed; 15 Jul scope gate; 14 Sep tiered rollout; risk Amber", "actions": "Martin R: 21 provider outreach by 15 Jul; Fateha K: comp analysis; recap posted to Slack" }
+  ],
+  "stakeholders": [
+    { "id": 2, "name": "Kamal K", "role": "Strategy Lead", "ws": "All", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 15, "name": "Steve Q", "role": "Program Sponsor", "ws": "All", "slack": "", "influence": "High", "keyContact": false, "lastEngaged": "2026-06-30" },
+    { "id": 16, "name": "Mohit C", "role": "Director, PM & Performance - B2B Supply", "ws": "All", "slack": "", "influence": "High", "keyContact": false, "lastEngaged": "2026-06-05" },
+    { "id": 3, "name": "Martin R", "role": "CAM - Connectivity", "ws": "Connectivity", "slack": "@maroy", "influence": "Medium", "lastEngaged": "2026-06-30" },
+    { "id": 4, "name": "Ariel R", "role": "HEP Engagement", "ws": "Commercial: HEP", "slack": "@arrobinson", "influence": "Medium", "lastEngaged": "2026-06-30" },
+    { "id": 5, "name": "Vero", "role": "HEP Engagement", "ws": "Commercial: HEP", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 6, "name": "Melissa BN", "role": "TAM - Technical Comms", "ws": "Connectivity", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 7, "name": "Anna Rannells", "role": "Partner Comms (TPA Ops)", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-30" },
+    { "id": 18, "name": "Jayce D", "role": "Field Enablement - HEP/HMP digest & FAQ", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "" },
+    { "id": 19, "name": "Annalisa Pike", "role": "TPSP", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "" },
+    { "id": 20, "name": "Fetie", "role": "Agent enablement & HPS articles", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "" },
+    { "id": 21, "name": "Aanchal", "role": "Partner Comms", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "" },
+    { "id": 22, "name": "Hanna", "role": "HPS Assessment", "ws": "P&T", "slack": "", "influence": "Medium", "lastEngaged": "" },
+    { "id": 8, "name": "Andrew B", "role": "Legal (ELCA)", "ws": "Legal / Finance", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-29" },
+    { "id": 9, "name": "Amy L", "role": "Finance", "ws": "Legal / Finance", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 10, "name": "Christine E", "role": "Analytics", "ws": "Analytics", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 11, "name": "Tia P", "role": "Product Lead", "ws": "P&T", "slack": "", "influence": "High", "keyContact": true, "lastEngaged": "2026-06-30" },
+    { "id": 12, "name": "Ludivine", "role": "PR & Crisis", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-30" },
+    { "id": 17, "name": "Mallorie Hutcherson", "role": "Crisis Contact - PR & Crisis", "ws": "Comms", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-30" },
+    { "id": 13, "name": "Julie", "role": "HEP Approval", "ws": "Commercial: HEP", "slack": "", "influence": "Medium", "lastEngaged": "2026-06-26" },
+    { "id": 14, "name": "Biviana", "role": "TPM", "ws": "All", "slack": "", "influence": "High", "keyContact": true, "lastEngaged": "2026-06-26" }
+  ],
+  "artefacts": [
+    { "id": 1, "doc": "Program Charter", "cat": "Governance", "desc": "Program charter - scope, objectives, stakeholders", "owner": "Fateha K", "link": "" },
+    { "id": 2, "doc": "Property List", "cat": "Data", "desc": "All properties in scope for the programme", "owner": "Tia P", "link": "" },
+    { "id": 3, "doc": "Phase 1A Compensation Uplift", "cat": "Financials", "desc": "Fixed $ Fees Uplift_2026_06_02 - $22.1M indicative", "owner": "Amy L / Christine E", "link": "" },
+    { "id": 4, "doc": "Phase 1B Compensation Uplift", "cat": "Financials", "desc": "Comp on Fees loaded as Taxes - $22.4M indicative", "owner": "Amy L / Christine E", "link": "" },
+    { "id": 5, "doc": "Phase 1C Compensation Uplift", "cat": "Financials", "desc": "TBC", "owner": "Amy L / Christine E", "link": "" },
+    { "id": 6, "doc": "Comp Uplift by Provider & Chain", "cat": "Financials", "desc": "9-tab workbook - provider/chain/HEP mapping, top-21 cohort $24.75M", "owner": "Fateha K", "link": "" },
+    { "id": 7, "doc": "PM Comms Pathway Guide v3", "cat": "Comms", "desc": "Program-agnostic comms pathway guide", "owner": "Fateha K", "link": "https://fkhanom1.github.io/PM_Comms_Pathway_Guide_v3.html" },
+    { "id": 8, "doc": "TPA Ops Partner Comms Form", "cat": "Comms", "desc": "Intake for all external partner-facing communications", "owner": "Anne R", "link": "https://forms.office.com/Pages/ResponsePage.aspx?id=4qLveQlUNUuXFK2gE47nbAAyzTco3zxIj3n9MqNjYRlUNkgyNUNPTUJYUlU1RzVUS040S1ZLSzBCUS4u" },
+    { "id": 9, "doc": "Crisis Comms Guidance", "cat": "Comms", "desc": "EG crisis communications guidance - escalation tiers", "owner": "Ludivine", "link": "https://expediagroup.atlassian.net/wiki/spaces/GMP/pages/606539495/Crisis+Communications+Guidance" },
+    { "id": 10, "doc": "EG Legal Service Desk", "cat": "Legal", "desc": "ELCA copy review intake", "owner": "Andrew B", "link": "https://expediagroup.atlassian.net/servicedesk/customer/portal/57" },
+    { "id": 11, "doc": "HEP Mandatory Fee Charge-Ability Review (Jun 2026)", "cat": "Legal", "desc": "HEP/Legal review of ability to charge comp on mandatory hotel fees by chain (30 Jun). 6 cannot-charge, 15 conditional. Files: HEP Fee Standardization _June 2026 / HEP Mandetory Fee Review_June 2026", "owner": "Vero / Andrew B", "link": "" }
+  ],
+  "raci": {
+    "people": ["Steve Q", "Mohit C", "Fateha K", "Biviana", "Tia P", "Martin R", "Amy L", "Andrew B"],
+    "rows": [
+      { "id": 1, "area": "Connectivity", "cells": { "Steve Q": "A", "Fateha K": "R", "Martin R": "R", "Mohit C": "C" } },
+      { "id": 2, "area": "Commercial: HEP", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C", "Tia P": "C" } },
+      { "id": 3, "area": "Commercial: HMP", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C" } },
+      { "id": 4, "area": "External Comms - Partner Comms", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C" } },
+      { "id": 5, "area": "Internal Comms - TPSP, PPI, Field", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C" } },
+      { "id": 6, "area": "PR & Crisis", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C" } },
+      { "id": 7, "area": "Legal", "cells": { "Steve Q": "A", "Fateha K": "R", "Andrew B": "R", "Mohit C": "C" } },
+      { "id": 8, "area": "Finance", "cells": { "Steve Q": "A", "Fateha K": "R", "Amy L": "R", "Mohit C": "C" } },
+      { "id": 9, "area": "Analytics", "cells": { "Steve Q": "A", "Fateha K": "R", "Mohit C": "C" } },
+      { "id": 10, "area": "P&T", "cells": { "Steve Q": "I", "Mohit C": "A", "Fateha K": "C", "Biviana": "R", "Tia P": "R" } }
+    ]
+  }
+}

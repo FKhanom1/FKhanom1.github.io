@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCoF Program Hub</title>
+<style>
+:root{--navy:#1a1f71;--blue:#0044ff;--lblue:#e8f0fe;--yellow:#ffc72c;--dark:#1b1b1b;--grey:#4a4a4a;--lgrey:#f5f5f5;--green:#0d8043;--red:#d32f2f;--orange:#e65100;--amber:#f59e0b;--r:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:var(--lgrey);color:var(--dark);line-height:1.5}
+.hdr{background:linear-gradient(135deg,var(--navy) 0%,#2a2f91 100%);color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-size:1.2rem;font-weight:700}
+.hdr p{font-size:0.78rem;opacity:.7;margin-top:2px}
+.rag-pill{padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;cursor:pointer;letter-spacing:.4px}
+.rag-green{background:#e8f5e9;color:var(--green)}
+.rag-amber{background:#fff8e1;color:var(--amber)}
+.rag-red{background:#ffebee;color:var(--red)}
+.tab-nav{background:#fff;border-bottom:2px solid #e0e0e0;padding:0 20px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 2px 4px rgba(0,0,0,.06)}
+.tbtn{padding:12px 14px;font-size:0.81rem;font-weight:600;color:var(--grey);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s}
+.tbtn:hover{color:var(--blue)}
+.tbtn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.view{display:none;max-width:1200px;margin:0 auto;padding:24px 20px}
+.view.active{display:block}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+@media(max-width:700px){.stat-row{grid-template-columns:1fr 1fr}}
+.stat{background:#fff;border-radius:var(--r);padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-top:3px solid var(--blue)}
+.stat.g{border-top-color:var(--green)}.stat.a{border-top-color:var(--amber)}.stat.r{border-top-color:var(--red)}
+.stat-val{font-size:1.6rem;font-weight:700;color:var(--navy);line-height:1}
+.stat-lbl{font-size:0.73rem;color:var(--grey);margin-top:4px}
+.card{background:#fff;border-radius:var(--r);padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:14px}
+.card h3{color:var(--navy);font-size:0.92rem;margin-bottom:12px}
+.tbl-wrap{background:#fff;border-radius:var(--r);box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:18px}
+.tbl-hdr{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
+.tbl-hdr h3{color:var(--navy);font-size:0.92rem;font-weight:700}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+td{padding:9px 12px;border-bottom:1px solid #f0f0f0;font-size:0.82rem;color:var(--grey);vertical-align:middle}
+tr:hover td{background:#fafafa}
+.ms-group td{background:var(--lblue);color:var(--navy);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px}
+.ms-group:hover td{background:var(--lblue)}
+[contenteditable]{outline:none;border-radius:3px;padding:1px 3px}
+[contenteditable]:focus{background:var(--lblue);outline:1px solid var(--blue)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;white-space:nowrap}
+.b-green{background:#e8f5e9;color:var(--green)}.b-amber{background:#fff8e1;color:var(--amber)}.b-red{background:#ffebee;color:var(--red)}
+.b-blue{background:var(--lblue);color:var(--blue)}.b-grey{background:#f5f5f5;color:#999}
+.b-done{background:#e8f5e9;color:var(--green)}.b-progress{background:var(--lblue);color:var(--blue)}
+.b-todo{background:#f5f5f5;color:#999}.b-blocked{background:#ffebee;color:var(--red)}
+.btn{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:#0033cc}
+.btn-sm{padding:4px 10px;font-size:0.75rem}
+.btn-ghost{background:var(--lgrey);color:var(--grey);border:1px solid #ddd}.btn-ghost:hover{background:#e8e8e8}
+.btn-del{background:none;border:none;color:#ddd;cursor:pointer;font-size:0.88rem;padding:2px 5px}.btn-del:hover{color:var(--red)}
+.filter-bar{display:flex;gap:8px;padding:10px 14px;background:#fafafa;border-bottom:1px solid #eee;flex-wrap:wrap}
+.filter-bar select,.filter-bar input{padding:5px 9px;border:1.5px solid #ddd;border-radius:6px;font-size:0.78rem;color:var(--dark);background:#fff}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:18px}
+.ws-card{background:#fff;border-radius:var(--r);padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid var(--blue)}
+.ws-card.amber{border-left-color:var(--amber)}.ws-card.red{border-left-color:var(--red)}.ws-card.green{border-left-color:var(--green)}
+.ws-lbl{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);display:block;margin-bottom:2px;margin-top:8px}
+.tl-wrap{background:#fff;border-radius:var(--r);padding:18px 22px;box-shadow:0 2px 6px rgba(0,0,0,.06);margin-bottom:18px;overflow-x:auto}
+.tl-row{display:flex;align-items:flex-start;min-width:600px;padding:8px 0}
+.tl-step{flex:1;text-align:center;position:relative}
+.tl-step::before{content:'';position:absolute;top:7px;left:-50%;right:50%;height:2px;background:#e0e0e0;z-index:0}
+.tl-step:first-child::before{display:none}
+.tl-dot{width:15px;height:15px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);margin:0 auto 5px;position:relative;z-index:1}
+.tl-dot.past{background:#ccc;box-shadow:0 0 0 2px #ccc}
+.tl-dot.soon{background:var(--amber);box-shadow:0 0 0 2px var(--amber)}
+.tl-dot.risk{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.tl-nm{font-size:0.63rem;font-weight:600;color:var(--dark);line-height:1.3}
+.tl-dt{font-size:0.59rem;color:var(--grey);margin-top:1px}
+.op-wrap{background:#fff;border-radius:var(--r);padding:32px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.op-hdr{border-bottom:3px solid var(--navy);padding-bottom:14px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px}
+.op-hdr h2{font-size:1.35rem;color:var(--navy);font-weight:700}
+.op-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:20px}
+@media(max-width:600px){.op-grid{grid-template-columns:1fr}}
+.op-section h4{font-size:0.71rem;text-transform:uppercase;letter-spacing:.4px;color:var(--blue);border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:10px}
+.op-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.82rem;border-bottom:1px solid #f5f5f5;gap:12px}
+.op-row span:first-child{color:var(--grey);flex-shrink:0}
+.op-row span:last-child{font-weight:600;color:var(--dark);text-align:right}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-hdr h2{color:var(--navy);font-size:1rem;font-weight:700}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:var(--r);padding:24px;width:90%;max-width:480px;max-height:88vh;overflow-y:auto}
+.modal h3{color:var(--navy);font-size:0.98rem;margin-bottom:14px}
+.modal label{display:block;font-size:0.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--navy);margin-bottom:3px;margin-top:11px}
+.modal input,.modal select,.modal textarea{width:100%;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:0.84rem;font-family:inherit}
+.modal textarea{height:72px;resize:vertical}
+.modal input:focus,.modal select:focus,.modal textarea:focus{outline:none;border-color:var(--blue)}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.footer{text-align:center;padding:20px;color:#bbb;font-size:0.73rem}
+.footer a{color:var(--blue);text-decoration:none}
+input[type=date]{border:none;background:none;font-size:0.82rem;color:var(--dark);cursor:pointer;font-family:inherit}
+@media print{.tab-nav,.hdr,.btn,.btn-del,.filter-bar,.modal-bg,.sec-hdr button,.tbl-hdr button{display:none!important}.view{padding:0}.op-wrap{box-shadow:none;padding:0}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>Hotel Comp on Fees <span style="opacity:.45;font-weight:400;font-size:.8rem">Program Hub</span></h1>
+    <p>B2B Supply Comms Ops · <span id="hdr-phase"></span> · Last updated <span id="hdr-date"></span> · Published by <span id="hdr-by"></span> · <span id="hdr-src"></span></p>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span id="hdr-rag" class="rag-pill" onclick="cycleRagHeader()" title="Click to update RAG"></span>
+    <span id="hdr-editor" onclick="setEditor()" title="Set your name — recorded when you publish" style="font-size:.72rem;color:#fff;opacity:.85;cursor:pointer;padding:4px 10px;border:1px solid rgba(255,255,255,.3);border-radius:20px"></span>
+    <button class="btn btn-sm" onclick="exportData()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)" title="Download data.json — commit this file to GitHub to publish your changes to everyone">Export data.json</button>
+    <button class="btn btn-sm" onclick="reloadFromGitHub()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)" title="Discard local edits and load the version currently published on GitHub">↻ Reload from GitHub</button>
+    <button class="btn btn-sm" onclick="document.getElementById('import-file').click()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)" title="Load data from a file on your computer">Import</button>
+    <input type="file" id="import-file" accept="application/json" style="display:none" onchange="importData(event)">
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tbtn active" onclick="switchTab('onepager',this)">One-Pager</button>
+  <button class="tbtn" onclick="switchTab('dashboard',this)">Dashboard</button>
+  <button class="tbtn" onclick="switchTab('milestones',this)">Milestones</button>
+  <button class="tbtn" onclick="switchTab('workstreams',this)">Workstreams</button>
+  <button class="tbtn" onclick="switchTab('actions',this)">Actions</button>
+  <button class="tbtn" onclick="switchTab('risks',this)">Risks</button>
+  <button class="tbtn" onclick="switchTab('steerco',this)">SteerCo</button>
+  <button class="tbtn" onclick="switchTab('decisions',this)">Decisions</button>
+  <button class="tbtn" onclick="switchTab('meetings',this)">Meetings</button>
+  <button class="tbtn" onclick="switchTab('stakeholders',this)">Stakeholders</button>
+  <button class="tbtn" onclick="switchTab('raci',this)">RACI</button>
+  <button class="tbtn" onclick="switchTab('artefacts',this)">Links &amp; Artefacts</button>
+</div>
+
+<div class="view active" id="view-onepager">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px">
+    <button class="btn btn-ghost btn-sm" onclick="window.print()">Print one-pager</button>
+  </div>
+  <div class="op-wrap" id="op-content"></div>
+</div>
+
+<div class="view" id="view-dashboard">
+  <div class="stat-row" id="dash-stats"></div>
+  <div id="dash-ws"></div>
+  <div id="dash-alerts"></div>
+</div>
+
+<div class="view" id="view-milestones">
+  <div class="tl-wrap"><h3 style="color:var(--navy);font-size:.84rem;margin-bottom:12px">Visual timeline</h3><div id="ms-tl" class="tl-row"></div></div>
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>Milestones</h3><button class="btn btn-primary btn-sm" onclick="openModal('milestone')">+ Add</button></div>
+    <table><thead><tr><th>Milestone</th><th>Date</th><th>Phase</th><th>Owner</th><th>Status</th><th>RAG</th><th>Notes</th><th></th></tr></thead>
+    <tbody id="ms-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-workstreams">
+  <div class="sec-hdr"><h2>Workstreams</h2><button class="btn btn-primary btn-sm" onclick="openModal('workstream')">+ Add</button></div>
+  <div class="ws-grid" id="ws-grid"></div>
+</div>
+
+<div class="view" id="view-actions">
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>Actions</h3><button class="btn btn-primary btn-sm" onclick="openModal('action')">+ Add</button></div>
+    <div class="filter-bar">
+      <select id="af-owner" onchange="renderActions()"><option value="">All owners</option></select>
+      <select id="af-ws" onchange="renderActions()"><option value="">All workstreams</option></select>
+      <select id="af-status" onchange="renderActions()">
+        <option value="">All statuses</option>
+        <option>To Do</option><option>In Progress</option><option>Done</option><option>Blocked</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear</button>
+    </div>
+    <table><thead><tr><th>Action</th><th>Owner</th><th>Workstream</th><th>Due</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+    <tbody id="ac-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-risks">
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>RAID Log</h3><button class="btn btn-primary btn-sm" onclick="openModal('risk')">+ Add</button></div>
+    <table><thead><tr><th>Risk / Issue</th><th>Type</th><th>RAG</th><th>Owner</th><th>Mitigation</th><th>Status</th><th></th></tr></thead>
+    <tbody id="ri-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-steerco">
+  <div class="sec-hdr"><h2>SteerCo Meetings</h2><button class="btn btn-primary btn-sm" onclick="openModal('steerco')">+ Add SteerCo</button></div>
+  <div id="sc-list"></div>
+</div>
+
+<div class="view" id="view-decisions">
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>Decisions Log</h3><button class="btn btn-primary btn-sm" onclick="openModal('decision')">+ Add decision</button></div>
+    <table><thead><tr><th>Decision</th><th>Date</th><th>Forum</th><th>Owner</th><th>Detail</th><th>Status</th><th></th></tr></thead>
+    <tbody id="dc-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-meetings">
+  <div class="sec-hdr"><h2>Meeting Log</h2><button class="btn btn-primary btn-sm" onclick="openModal('meeting')">+ Add meeting</button></div>
+  <div id="mt-list"></div>
+</div>
+
+<div class="view" id="view-stakeholders">
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>Stakeholders</h3><button class="btn btn-primary btn-sm" onclick="openModal('stakeholder')">+ Add</button></div>
+    <table><thead><tr><th>Name</th><th>Role</th><th>Workstream</th><th>Slack</th><th>Influence</th><th>Last Engaged</th><th></th></tr></thead>
+    <tbody id="st-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-raci">
+  <div class="sec-hdr"><h2>RACI &ndash; Roles &amp; Responsibilities</h2>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="addRaciPerson()">+ Person</button>
+      <button class="btn btn-primary btn-sm" onclick="addRaciRow()">+ Area</button>
+    </div>
+  </div>
+  <div class="card" style="padding:10px 14px;font-size:.78rem;color:var(--grey);margin-bottom:14px">
+    <strong style="color:var(--green)">R</strong> Responsible &nbsp;&middot;&nbsp; <strong style="color:var(--blue)">A</strong> Accountable &nbsp;&middot;&nbsp; <strong style="color:var(--amber)">C</strong> Consulted &nbsp;&middot;&nbsp; <strong style="color:#999">I</strong> Informed &nbsp;&middot;&nbsp; click a cell to cycle. <em>Starter grid &ndash; verify all assignments.</em>
+  </div>
+  <div class="tbl-wrap" style="overflow-x:auto"><table id="raci-tbl"></table></div>
+</div>
+
+<div class="view" id="view-artefacts">
+  <div class="tbl-wrap">
+    <div class="tbl-hdr"><h3>Links &amp; Artefacts</h3><button class="btn btn-primary btn-sm" onclick="openModal('artefact')">+ Add</button></div>
+    <table><thead><tr><th>Document</th><th>Category</th><th>Description</th><th>Owner</th><th>Link</th><th></th></tr></thead>
+    <tbody id="ar-tbody"></tbody></table>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg" onclick="closeBg(event)">
+  <div class="modal">
+    <h3 id="modal-title">Add item</h3>
+    <div id="modal-body"></div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveModal()">Add</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Hotel Comp on Fees · Program Hub · B2B Supply Comms Ops · <a href="mailto:fkhanom@expediagroup.com">Fateha K</a></div>
+
+<script>
+const DEF={
+  meta:{name:'Hotel Comp on Fees',phase:'Active: 1A + 1B (1C to follow)',pm:'Fateha K',sponsor:'Steve Q',
+    p1a:'Phase 1A - Flat fees. Compensation on flat-rate partner fees. Bundled with 1B for a single launch.',
+    p1b:'Phase 1B - Fees as taxes. Compensation on fees loaded as taxes. Launched together with 1A as one narrative.',
+    p1c:'Phase 1C - Mandatory fees. Compensation on mandatory partner fees. Kept separate from 1A/1B as a different narrative. Later timing.',
+    objective:'Hotel Comp on Fees ensures EG is compensated across the range of hotel fees - flat fees, fees loaded as taxes, and mandatory fees - correcting gaps in what is currently collected. Delivered in phases: 1A and 1B are bundled corrections launching together; 1C follows as a separate narrative. Scope spans ~178,000 HMP and HEP properties. Target: $83.4M annualised RMD by 2027, measured as Net Program RMD - incremental comp minus lost RMD from attrition and BML degradation. Pilot 3 Aug, validation gate 5 Sep, full rollout 14 Sep 2026.',rag:'amber',ragReason:'Provider-chain dev dependency and HEP approval gate outstanding.',lastUpdated:'',publishedBy:''},
+  milestones:[
+    {id:1,name:'UAT Completion',date:'2026-07-03',phase:'1A',owner:'Biviana',status:'In Progress',rag:'amber',notes:'Started 4 May; extended due to booking availability issues'},
+    {id:2,name:'Code Complete',date:'2026-07-10',phase:'1B',owner:'Biviana',status:'On Track',rag:'green',notes:''},
+    {id:3,name:'UAT Completion (starts 13 Jul)',date:'2026-07-24',phase:'1B',owner:'Biviana',status:'On Track',rag:'green',notes:'UAT starts 13 July'},
+    {id:4,name:'TAM/CAM Assessment',date:'2026-06-24',phase:'1B',owner:'Melissa BN',status:'In Progress',rag:'green',notes:'Feedback collection from connectivity teams; awaiting CAM LT assessment'},
+    {id:5,name:'Tech Go-Live Ready',date:'2026-08-03',phase:'1B',owner:'Biviana',status:'On Track',rag:'green',notes:''},
+    {id:6,name:'Partner Comms - Stakeholder Approval',date:'2026-06-30',phase:'All',owner:'Fateha K',status:'Complete',rag:'green',notes:'Golan and Steve have approved with feedback'},
+    {id:7,name:'Pilot Success Criteria Confirmed',date:'',phase:'All',owner:'Biviana / Tia P',status:'In Progress',rag:'amber',notes:'Defining success roll-out to select the right pilot properties'},
+    {id:8,name:'Provider Dev Scope Gate',date:'2026-07-15',phase:'All',owner:'Martin R / Melissa BN',status:'In Progress',rag:'amber',notes:''},
+    {id:9,name:'Properties signed off for Pilot',date:'2026-07-20',phase:'All',owner:'Tia P',status:'Not Started',rag:'amber',notes:'20 July (TBC) - ready from tech + comms?'},
+    {id:10,name:'Pilot Roll Out',date:'2026-08-03',phase:'All',owner:'Tia P / Biviana',status:'Not Started',rag:'amber',notes:'Confirm if 2 weeks or 4'},
+    {id:11,name:'Partner Comms - Audience List Confirmed/Mapping',date:'',phase:'All',owner:'Tia P',status:'Pending',rag:'amber',notes:'Pending Go-Live date confirmation'},
+    {id:12,name:'Partner Comms - Hotel & Connectivity Comms Send Date',date:'2026-08-03',phase:'All',owner:'Anna Rannells / Aanchal',status:'Pending',rag:'amber',notes:'Pending Go-Live date confirmation'},
+    {id:13,name:'Field Enablement Complete',date:'2026-08-14',phase:'All',owner:'Jayce D',status:'On Track',rag:'green',notes:'Internal FAQ & Weekly Digest (Jira)'},
+    {id:14,name:'TPSP Readiness',date:'2026-07-27',phase:'All',owner:'Fetie / Annalisa Pike',status:'Pending',rag:'amber',notes:'GAIF; TPSP KB article (AEPIT)'},
+    {id:15,name:'HPS Assessment Complete',date:'',phase:'All',owner:'Hanna',status:'Pending',rag:'amber',notes:'Involved in UAT for 1A and 1B'},
+    {id:16,name:'PR & Crisis Communication Statement',date:'',phase:'All',owner:'Mallorie / Ludivine',status:'In Progress',rag:'amber',notes:'Crisis messaging & escalation protocols for partner pushback'},
+    {id:17,name:'Validation & invoice gate',date:'2026-09-05',phase:'1A/1B',owner:'Amy L',status:'Upcoming',rag:'amber',notes:'Validation + Finance sign-off required before this date (kept from hub; not on canvas)'},
+    {id:18,name:'Program Go-Live Date (1A + 1B)',date:'2026-09-14',phase:'1A/1B',owner:'Fateha K',status:'In Progress',rag:'amber',notes:'Full launch for 1A and 1B; pilot confirmed 3 Aug'}
+  ],
+  workstreams:[
+    {id:1,name:'Connectivity',owner:'Martin R / Melissa BN (TAM)',rag:'red',status:'In Progress',lastUpdate:'Provider outreach to 21 vendors underway; 15 Jul scope gate at risk',nextAction:'Complete outreach by 15 Jul scope gate',slack:'@maroy'},
+    {id:2,name:'Commercial: HEP',owner:'Ariel / Vero',rag:'amber',status:'In Progress',lastUpdate:'Julie approval secured; aligning on engagement plan',nextAction:'Align on HEP engagement plan (Thu 2 Jul)',slack:'@arrobinson'},
+    {id:3,name:'Commercial: HMP',owner:'Rachel B',rag:'amber',status:'In Progress',lastUpdate:'TBC — awaiting HMP commercial update',nextAction:'Confirm HMP engagement plan and owner',slack:''},
+    {id:4,name:'External Comms - Partner Comms (umbrella)',owner:'Anne R',rag:'amber',status:'In Progress',lastUpdate:'Umbrella comms draft signed off by leaders; now with partner comms team',nextAction:'Provide updated partner list to partner comms team',slack:''},
+    {id:5,name:'Internal Comms - TPSP, PPI, Field',owner:'Annalisa P / Fetie D / Jayce (Field)',rag:'amber',status:'In Progress',lastUpdate:'TBC — awaiting TPSP / PPI / Field update',nextAction:'TPSP, Partner Process Improvement, Field Enablement alignment',slack:''},
+    {id:10,name:'PR & Crisis',owner:'Ludivine / Mallorie',rag:'amber',status:'In Progress',lastUpdate:'PR/crisis readiness call held 30 Jun',nextAction:'FAQ and holding statement by Wed 2 Jul',slack:''},
+    {id:6,name:'Legal',owner:'Andrew B',rag:'green',status:'In Progress',lastUpdate:'1A/1B scope confirmed as hygiene - not 1C',nextAction:'Monitor conditional charge exposure ($3M/1A)',slack:''},
+    {id:7,name:'Finance',owner:'Amy L',rag:'green',status:'In Progress',lastUpdate:'1A $22.1M / 1B $22.4M indicative uplift confirmed',nextAction:'Finance sign-off for invoice gate 5 Sep',slack:''},
+    {id:8,name:'Analytics',owner:'Christine E',rag:'green',status:'In Progress',lastUpdate:'1A $22.1M / 1B $22.4M uplift validated',nextAction:'Post-launch metrics baseline for 1A UAT',slack:''},
+    {id:9,name:'P&T',owner:'Biviana',rag:'red',status:'In Progress',lastUpdate:'Short development and UAT window for 1B',nextAction:'Confirm 1B code + UAT completion dates; protect UAT window',slack:''}
+  ],
+  actions:[
+    {id:1,action:'Outreach to 21 providers - connectivity scope gate',owner:'Martin R / Melissa BN',ws:'Connectivity',due:'2026-07-15',status:'In Progress',notes:'White-glove tier; $11M of $22M 1A RMD'},
+    {id:2,action:'Align on HEP engagement plan (Thursday)',owner:'Ariel / Vero',ws:'Commercial: HEP',due:'2026-07-02',status:'In Progress',notes:'Julie approval secured; align on the plan Thu 2 Jul'},
+    {id:3,action:'FAQ and holding statement for PR/crisis',owner:'Ludivine / Mallorie',ws:'PR & Crisis',due:'2026-07-02',status:'To Do',notes:'Required before pilot launch'},
+    {id:5,action:'Pilot property list (1A + 1B, post-connectivity issue)',owner:'Biviana',ws:'P&T',due:'2026-07-03',status:'In Progress',notes:'Pilot list for 1A and 1B following connectivity issue; with Biviana'},
+    {id:6,action:'HEP chain-to-vendor mapping',owner:'Martin R',ws:'Connectivity',due:'2026-07-10',status:'Done',notes:'Completed by Martin R. Marriott/MARSHA, DerbySoft to Hilton/IHG/Best Western/Omni'},
+    {id:7,action:'Provide updated partner list to partner comms team',owner:'Fateha K',ws:'External Comms - Partner Comms (umbrella)',due:'2026-07-07',status:'In Progress',notes:'Umbrella comms draft signed off by leaders; now with partner comms team; we owe them an updated partner list'},
+    {id:8,action:'Obtain specific charge conditions per chain from HEP/Legal',owner:'Fateha K / Andrew B',ws:'Legal / Finance',due:'2026-07-08',status:'To Do',notes:'From 30 Jun HEP/Legal review. Prioritise Marriott / Hyatt / Four Seasons = $8.83M (93% of conditional value). Translate "conditional yes" into per-chain actions. EVT/Rydges + Highgate awaiting Account Team on commercial risk + SA comp % alignment.'}
+  ],
+  risks:[
+    {id:1,risk:'Provider-chain dev dependency',type:'Risk',rag:'amber',owner:'Martin R',mitigation:'Phased/tiered rollout with 15 Jul scope gate; incentivisation under review',status:'Open'},
+    {id:2,risk:'HEP partner engagement and data integrity (65k+ properties in scope)',type:'Risk',rag:'amber',owner:'Julie / Ariel / Vero',mitigation:'Default-include unless contractual prohibition; validate data integrity for additional properties; HEP engagement sessions (Ariel/Vero); high-risk chains prioritised',status:'Open'},
+    {id:3,risk:'Double charging risk on invoices',type:'Risk',rag:'red',owner:'Amy L',mitigation:'Invoice gate 5 Sep; Finance review before rollout',status:'Open'},
+    {id:4,risk:'14 Sep full rollout at risk if 15 Jul gate missed',type:'Risk',rag:'red',owner:'Fateha K',mitigation:'Escalation to Steve Q (sponsor); tiered fallback strategy in place',status:'Open'},
+    {id:5,risk:'Partner pushback on fee changes',type:'Risk',rag:'amber',owner:'Ludivine / Mallorie',mitigation:'PR/crisis pack pre-built; holding statements before pilot launch',status:'Open'},
+    {id:6,risk:'Short development and UAT window for P&T (1B)',type:'Risk',rag:'red',owner:'Biviana / Tia P',mitigation:'Confirm 1B code + UAT completion dates (Tia P/Karan/Bogdan); 2-3 wks UAT after mid-July code; rollback capability confirmed for both components',status:'Open'},
+    {id:7,risk:'HEP chain charge-ability - 21 chains flagged in 30 Jun HEP/Legal review',type:'Dependency',rag:'amber',owner:'Andrew B / Vero',mitigation:'Cannot charge without agreement update: 6 chains (IHG, Minor, Mandarin Oriental, NH, Diamond, Omni), ~$0.6M combined (1A $0.05M / 1B $0.55M), ~2,884 props (volume mostly IHG, low value). Conditional yes: 15 chains, ~$9.45M combined (1A $3.0M / 1B $6.45M), 93% in Marriott/Hyatt/Four Seasons ($8.83M). Condition content pending from Legal. 1C not yet sized.',status:'Open'}
+  ],
+  decisions:[
+    {id:1,date:'2026-05-08',title:'Unified comms narrative + default-include partners',forum:'SteerCo #1',owner:'Steve Q',detail:'Comms cover the full program (1A/1B/1C) as one narrative, not phase-by-phase. Default-include all partners unless a contractual prohibition exists (HEP and Vegas reviewed on that basis).',status:'Confirmed'},
+    {id:2,date:'2026-06-05',title:'1A + 1B bundled as a single launch',forum:'SteerCo #2',owner:'Steve Q',detail:'Both are hygiene corrections - one release, one comms narrative, one readiness cycle. EPF launches immediately without proactive comms. 1A/1B narrative kept separate from 1C (tax compliance vs contract rights).',status:'Confirmed'},
+    {id:3,date:'2026-06-05',title:'Success metric = Net Program RMD',forum:'SteerCo #2',owner:'Fateha K',detail:'Approved measure: Net Program RMD = Incremental Comp on Fees minus Lost RMD from attrition and BML degradation. Target $83.4M annualised by 2027.',status:'Confirmed'},
+    {id:4,date:'2026-06-23',title:'Launch dates locked',forum:'SteerCo #3 (async)',owner:'Steve Q',detail:'3 Aug pilot, 5 Sep validation gate, 14 Sep full rollout (1A+1B bundled), subject to pilot go/no-go.',status:'Confirmed'},
+    {id:5,date:'2026-06-26',title:'Tiered provider rollout + 15 Jul scope gate',forum:'Connectivity WG',owner:'Martin R',detail:'429 providers across 3 tiers (21 white-glove, 37 proactive, 371 long-tail). Top 21 outreach by 15 Jul scope gate (~$11M of $22M 1A RMD). If gate missed, 14 Sep at risk.',status:'Confirmed'},
+    {id:6,date:'2026-06-29',title:'1A/1B legal scope confirmed as hygiene',forum:'Legal review',owner:'Andrew B',detail:'1A/1B contract review is hygiene, not a blocker. 1C is separate. Identified chains unable to proceed (cannot-charge, negligible: $0.05M/1A, $0.55M/1B), plus a number of chains with conditional qualifiers still to be worked through.',status:'Confirmed'},
+    {id:7,date:'2026-06-30',title:'PR/crisis pack required before pilot launch',forum:'PR readiness call',owner:'Ludivine / Mallorie',detail:'Holding statements and FAQ pre-built before any partner comms go out. Kyle consult-only at this stage. FAQ due Wed 2 Jul.',status:'Confirmed'}
+  ],
+  steerco:[
+    {id:1,date:'2026-05-08',title:'SteerCo #1 - Program kickoff',materials:'Program context and phase status; rollout options (1A/1B/1C); comms strategy; HEP inclusion approach. Chair: Fateha K, Sponsor: Steve Q',decisions:'Confirmed: comms cover full program (1A/1B/1C) as one unified narrative, not phase-by-phase. Confirmed: default include all partners unless contractual prohibition (HEP and Vegas reviewed on that basis). Confirmed: follow-up SteerCo in 2-3 wks. Deferred: 1A go-live date (mid-June seen as ambitious); 1C option (lean Option B - non-connected Sep, connected Nov); success metric endorsement (must also capture negative impacts)',actions:'Fateha K: schedule follow-up, share draft partner comms, present 1B/1C options with risk-reward scenarios, success metrics incl. negative impacts. Tia P: Booking.com fee exception analysis (Vegas + others). Kamal K: share payment change info with Rachel B. Rachel B / Julie: HEP inclusion + Vegas strategy',status:'Complete'},
+    {id:2,date:'2026-06-05',title:'SteerCo #2',materials:'Scope expansion 79 to 178,000 properties (ETP properties found); 1A+1B bundling debate; technical readiness (mid-July code, 2-3 wks UAT); Aug vs Sep launch (~$1.8M RMD / $1.6M GP per month delay); success metrics framework; 1C separate session',decisions:'Confirmed: 1A and 1B bundled as single launch (both hygiene corrections, one comms narrative). Confirmed: proactive comms for bundle + connectivity provider comms in parallel. Confirmed: success metric = Net Program RMD (Incremental Comp on Fees minus Lost RMD from attrition and BML degradation). Confirmed: EPF launches immediately, no proactive comms. Confirmed: 1A/1B narrative kept separate from 1C. Deferred: go/no-go on Aug vs Sep (async email once readiness confirmed); 1C timing (smaller group - Mohit C/Steve Q/Golan/Julie/Joey)',actions:'Fateha K: update deck with 1C figures, align success metrics (RMD vs supplier margin per Steve Q), send notes/recording. Kamal K: quantify Aug downside risk (Avail/BML/visibility booster) vs $1.8M upside. Tia P: launch EPF; confirm code/UAT dates; confirm 1B connectivity lead time and 60-day notice. Fateha K/Mohit C: validate data integrity for +65k properties. Mohit C: rollout plan options Aug vs Sep. Mohit C/Steve Q/Golan: final go/no-go async',status:'Complete'},
+    {id:3,date:'2026-06-23',title:'SteerCo #3 - Async (email update)',materials:'Commercial model email: Aug vs Sep launch - Aug $18.5M RMD / $16.7M GP, Sep $14.9M RMD / $13.4M GP; slip cost $3.6M RMD; peak-summer downside base $9.7M RMD; net base -$6.1M',decisions:'14 Sep full rollout (1A+1B) on pilot go/no-go; 5 Sep validation gate; 3 Aug pilot',actions:'Provider tiering (21 white-glove / 37 proactive / 371 long-tail); 15 Jul scope gate',status:'Complete'},
+    {id:4,date:'2026-09-14',title:'SteerCo - Go-live gate (full rollout go/no-go)',materials:'Comp uplift workbook (9-tab), 14 Sep risk paper, connectivity tiering',decisions:'TBC - full rollout go/no-go for 1A + 1B',actions:'Confirm 21-provider readiness; final RMD validation',status:'Upcoming'}
+  ],
+  meetings:[
+    {id:1,date:'2026-06-30',title:'PR & Crisis Readiness',attendees:'Ludivine, Mallorie, Fateha K',decisions:'FAQ and holding statement needed before partner outreach; Kyle consult-only at this stage',actions:'Ludivine: FAQ by Wed 2 Jul; Fateha K: chase umbrella comms approval'},
+    {id:2,date:'2026-06-26',title:'Connectivity Working Group',attendees:'Martin R, Melissa BN, Fateha K',decisions:'Tiered provider rollout (21 white-glove / 37 proactive / 371 long-tail); 15 Jul scope gate; 14 Sep rollout at risk if missed',actions:'Martin R: outreach to 21 providers by 15 Jul; Fateha K: comp uplift analysis'},
+    {id:3,date:'2026-06-25',title:'Program Working Group',attendees:'Full WG',decisions:'21 providers confirmed; 15 Jul scope gate; 14 Sep tiered rollout; risk Amber',actions:'Martin R: 21 provider outreach by 15 Jul; Fateha K: comp analysis; recap posted to Slack'}
+  ],
+  stakeholders:[
+    {id:2,name:'Kamal K',role:'Strategy Lead',ws:'All',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:15,name:'Steve Q',role:'Program Sponsor',ws:'All',slack:'',influence:'High',keyContact:false,lastEngaged:'2026-06-30'},
+    {id:16,name:'Mohit C',role:'Director, PM & Performance - B2B Supply',ws:'All',slack:'',influence:'High',keyContact:false,lastEngaged:'2026-06-05'},
+    {id:3,name:'Martin R',role:'CAM - Connectivity',ws:'Connectivity',slack:'@maroy',influence:'Medium',lastEngaged:'2026-06-30'},
+    {id:4,name:'Ariel R',role:'HEP Engagement',ws:'Commercial: HEP',slack:'@arrobinson',influence:'Medium',lastEngaged:'2026-06-30'},
+    {id:5,name:'Vero',role:'HEP Engagement',ws:'Commercial: HEP',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:6,name:'Melissa BN',role:'TAM - Technical Comms',ws:'Connectivity',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:7,name:'Anna Rannells',role:'Partner Comms (TPA Ops)',ws:'Comms',slack:'',influence:'Medium',lastEngaged:'2026-06-30'},
+    {id:18,name:'Jayce D',role:'Field Enablement - HEP/HMP digest & FAQ',ws:'Comms',slack:'',influence:'Medium',lastEngaged:''},
+    {id:19,name:'Annalisa Pike',role:'TPSP',ws:'Comms',slack:'',influence:'Medium',lastEngaged:''},
+    {id:20,name:'Fetie',role:'Agent enablement & HPS articles',ws:'Comms',slack:'',influence:'Medium',lastEngaged:''},
+    {id:21,name:'Aanchal',role:'Partner Comms',ws:'Comms',slack:'',influence:'Medium',lastEngaged:''},
+    {id:22,name:'Hanna',role:'HPS Assessment',ws:'P&T',slack:'',influence:'Medium',lastEngaged:''},
+    {id:8,name:'Andrew B',role:'Legal (ELCA)',ws:'Legal / Finance',slack:'',influence:'Medium',lastEngaged:'2026-06-29'},
+    {id:9,name:'Amy L',role:'Finance',ws:'Legal / Finance',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:10,name:'Christine E',role:'Analytics',ws:'Analytics',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:11,name:'Tia P',role:'Product Lead',ws:'P&T',slack:'',influence:'High',keyContact:true,lastEngaged:'2026-06-30'},
+    {id:12,name:'Ludivine',role:'PR & Crisis',ws:'Comms',slack:'',influence:'Medium',lastEngaged:'2026-06-30'},
+    {id:17,name:'Mallorie Hutcherson',role:'Crisis Contact - PR & Crisis',ws:'Comms',slack:'',influence:'Medium',lastEngaged:'2026-06-30'},
+    {id:13,name:'Julie',role:'HEP Approval',ws:'Commercial: HEP',slack:'',influence:'Medium',lastEngaged:'2026-06-26'},
+    {id:14,name:'Biviana',role:'TPM',ws:'All',slack:'',influence:'High',keyContact:true,lastEngaged:'2026-06-26'}
+  ],
+  artefacts:[
+    {id:1,doc:'Program Charter',cat:'Governance',desc:'Program charter - scope, objectives, stakeholders',owner:'Fateha K',link:''},
+    {id:2,doc:'Property List',cat:'Data',desc:'All properties in scope for the programme',owner:'Tia P',link:''},
+    {id:3,doc:'Phase 1A Compensation Uplift',cat:'Financials',desc:'Fixed $ Fees Uplift_2026_06_02 - $22.1M indicative',owner:'Amy L / Christine E',link:''},
+    {id:4,doc:'Phase 1B Compensation Uplift',cat:'Financials',desc:'Comp on Fees loaded as Taxes - $22.4M indicative',owner:'Amy L / Christine E',link:''},
+    {id:5,doc:'Phase 1C Compensation Uplift',cat:'Financials',desc:'TBC',owner:'Amy L / Christine E',link:''},
+    {id:6,doc:'Comp Uplift by Provider & Chain',cat:'Financials',desc:'9-tab workbook - provider/chain/HEP mapping, top-21 cohort $24.75M',owner:'Fateha K',link:''},
+    {id:7,doc:'PM Comms Pathway Guide v3',cat:'Comms',desc:'Program-agnostic comms pathway guide',owner:'Fateha K',link:'https://fkhanom1.github.io/PM_Comms_Pathway_Guide_v3.html'},
+    {id:8,doc:'TPA Ops Partner Comms Form',cat:'Comms',desc:'Intake for all external partner-facing communications',owner:'Anne R',link:'https://forms.office.com/Pages/ResponsePage.aspx?id=4qLveQlUNUuXFK2gE47nbAAyzTco3zxIj3n9MqNjYRlUNkgyNUNPTUJYUlU1RzVUS040S1ZLSzBCUS4u'},
+    {id:9,doc:'Crisis Comms Guidance',cat:'Comms',desc:'EG crisis communications guidance - escalation tiers',owner:'Ludivine',link:'https://expediagroup.atlassian.net/wiki/spaces/GMP/pages/606539495/Crisis+Communications+Guidance'},
+    {id:10,doc:'EG Legal Service Desk',cat:'Legal',desc:'ELCA copy review intake',owner:'Andrew B',link:'https://expediagroup.atlassian.net/servicedesk/customer/portal/57'},
+    {id:11,doc:'HEP Mandatory Fee Charge-Ability Review (Jun 2026)',cat:'Legal',desc:'HEP/Legal review of ability to charge comp on mandatory hotel fees by chain (30 Jun). 6 cannot-charge, 15 conditional. Files: HEP Fee Standardization _June 2026 / HEP Mandetory Fee Review_June 2026',owner:'Vero / Andrew B',link:''}
+  ],
+  raci:{
+    people:['Steve Q','Mohit C','Fateha K','Biviana','Tia P','Martin R','Amy L','Andrew B'],
+    rows:[
+      {id:1,area:'Connectivity',cells:{'Steve Q':'A','Fateha K':'R','Martin R':'R','Mohit C':'C'}},
+      {id:2,area:'Commercial: HEP',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C','Tia P':'C'}},
+      {id:3,area:'Commercial: HMP',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C'}},
+      {id:4,area:'External Comms - Partner Comms',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C'}},
+      {id:5,area:'Internal Comms - TPSP, PPI, Field',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C'}},
+      {id:6,area:'PR & Crisis',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C'}},
+      {id:7,area:'Legal',cells:{'Steve Q':'A','Fateha K':'R','Andrew B':'R','Mohit C':'C'}},
+      {id:8,area:'Finance',cells:{'Steve Q':'A','Fateha K':'R','Amy L':'R','Mohit C':'C'}},
+      {id:9,area:'Analytics',cells:{'Steve Q':'A','Fateha K':'R','Mohit C':'C'}},
+      {id:10,area:'P&T',cells:{'Steve Q':'I','Mohit C':'A','Fateha K':'C','Biviana':'R','Tia P':'R'}}
+    ]
+  }
+};
+
+let S={};
+const KEY='hcof_hub_v21';
+
+function nowISO(){return new Date().toISOString();}
+
+// Load order of precedence:
+//  1. data.json committed to the repo (the shared source of truth on GitHub Pages)
+//  2. this browser's saved edits (localStorage) — kept if newer than the repo copy
+//  3. the built-in DEF seed (offline / opened via file://)
+async function loadState(){
+  const saved=localStorage.getItem(KEY);
+  const local=saved?JSON.parse(saved):null;
+  let remote=null;
+  try{
+    const res=await fetch('data.json',{cache:'no-store'});
+    if(res.ok)remote=await res.json();
+  }catch(e){/* opened via file:// or offline — fall back to local/DEF */}
+
+  let src='seed';
+  if(remote&&remote.meta&&remote.milestones){
+    if(!local){S=remote;src='github';}
+    else{
+      const rt=remote.meta.savedAt||'',lt=local.meta.savedAt||'';
+      if(rt&&rt>lt){S=remote;src='github';}   // a newer version was published to the repo
+      else{S=local;src='local';}
+    }
+  }else{
+    S=local?local:JSON.parse(JSON.stringify(DEF));
+    src=local?'local':'seed';
+  }
+  if(!S.meta.savedAt)S.meta.savedAt=nowISO();
+  if(!S.meta.lastUpdated)S.meta.lastUpdated=today();
+  if(!S.raci)S.raci=JSON.parse(JSON.stringify(DEF.raci));
+  window._dataSrc=src;
+}
+
+async function reloadFromGitHub(){
+  try{
+    const res=await fetch('data.json',{cache:'no-store'});
+    if(!res.ok){alert('No data.json found alongside this page yet. Publish one first: Export data.json → commit it to the repo.');return;}
+    const remote=await res.json();
+    if(!remote.meta||!remote.milestones){alert('The data.json in the repo is not a valid HCoF export.');return;}
+    if(!confirm('Replace your local copy with the version published on GitHub? Any edits you have not yet exported and committed will be lost.'))return;
+    S=remote;
+    localStorage.setItem(KEY,JSON.stringify(S));
+    window._dataSrc='github';
+    renderAll();
+    alert('Loaded the version published on GitHub.');
+  }catch(e){alert('Could not reach data.json: '+e.message);}
+}
+
+function saveAll(){
+  S.meta.lastUpdated=today();
+  S.meta.savedAt=nowISO();
+  localStorage.setItem(KEY,JSON.stringify(S));
+  updateHeader();
+}
+
+function getEditor(){return localStorage.getItem('hcof_editor')||'Fateha K';}
+function setEditor(){
+  const n=prompt('Your name (recorded when you publish):',getEditor());
+  if(n&&n.trim()){localStorage.setItem('hcof_editor',n.trim());updateHeader();}
+}
+
+function exportData(){
+  S.meta.publishedBy=getEditor();
+  saveAll();
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='data.json';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+function importData(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!data.meta||!data.milestones){alert('That does not look like a valid HCoF Hub export file.');return;}
+      if(!confirm('This will replace all current data with the imported file. Continue?'))return;
+      S=data;
+      saveAll();renderAll();
+      alert('Data imported successfully.');
+    }catch(err){alert('Could not read that file: '+err.message);}
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+function today(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+function fmt(ds){if(!ds)return'';try{return new Date(ds).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}catch{return ds}}
+function isPast(ds){return ds&&new Date(ds)<new Date()}
+function isSoon(ds){const d=new Date(ds);const n=new Date();return d>=n&&(d-n)<21*864e5}
+function nid(arr){return arr.length?Math.max(...arr.map(x=>x.id))+1:1}
+
+function updateHeader(){
+  const m=S.meta;
+  document.getElementById('hdr-phase').textContent=m.phase;
+  document.getElementById('hdr-date').textContent=m.lastUpdated||today();
+  const rp=document.getElementById('hdr-rag');
+  rp.className='rag-pill rag-'+m.rag;
+  rp.textContent=m.rag.charAt(0).toUpperCase()+m.rag.slice(1);
+  const srcEl=document.getElementById('hdr-src');
+  if(srcEl){const s=window._dataSrc;srcEl.textContent=s==='github'?'source: GitHub':s==='local'?'source: this browser (unpublished edits)':'source: built-in copy';}
+  const byEl=document.getElementById('hdr-by');if(byEl)byEl.textContent=m.publishedBy||'—';
+  const edEl=document.getElementById('hdr-editor');if(edEl)edEl.textContent='You: '+getEditor();
+}
+
+function cycleRagHeader(){
+  const c={green:'amber',amber:'red',red:'green'};
+  S.meta.rag=c[S.meta.rag]||'amber';
+  saveAll();renderOnePager();renderDashboard();
+}
+
+function ragBadge(r){
+  const rn=r.toLowerCase();
+  const cls=rn==='red'?'b-red':rn==='amber'?'b-amber':'b-green';
+  return`<span class="badge ${cls}" onclick="cycleRagEl(this)">${r.charAt(0).toUpperCase()+r.slice(1)}</span>`;
+}
+
+function statusBadge(s){
+  const m={'To Do':'b-todo','In Progress':'b-progress','Done':'b-done','Blocked':'b-blocked','Upcoming':'b-blue','At risk':'b-amber','Complete':'b-done','Open':'b-grey','Closed':'b-done'};
+  return`<span class="badge ${m[s]||'b-grey'}" onclick="cycleStatusEl(this)">${s}</span>`;
+}
+
+function cycleRagEl(el){
+  const c=['Green','Amber','Red'];
+  const i=c.indexOf(el.textContent);el.textContent=c[(i+1)%3];
+  el.className='badge '+(el.textContent==='Green'?'b-green':el.textContent==='Amber'?'b-amber':'b-red');
+  schedSave();
+}
+
+function cycleStatusEl(el){
+  const pools=[['To Do','In Progress','Done','Blocked'],['Upcoming','In Progress','At risk','Complete'],['Open','Closed']];
+  const cur=el.textContent;
+  const pool=pools.find(p=>p.includes(cur))||pools[0];
+  el.textContent=pool[(pool.indexOf(cur)+1)%pool.length];
+  const m={'To Do':'b-todo','In Progress':'b-progress','Done':'b-done','Blocked':'b-blocked','Upcoming':'b-blue','At risk':'b-amber','Complete':'b-done','Open':'b-grey','Closed':'b-done'};
+  el.className='badge '+(m[el.textContent]||'b-grey');
+  schedSave();
+}
+
+let _st;function schedSave(){clearTimeout(_st);_st=setTimeout(saveAll,600);}
+
+function saveMeta(el,field){
+  S.meta[field]=el.textContent.trim();
+  saveAll();
+  updateHeader();
+}
+
+function saveCell(el,arr,id,field){
+  const item=S[arr].find(x=>String(x.id)===String(id));
+  if(item){item[field]=el.textContent.trim();schedSave();}
+}
+
+function saveDateCell(el,arr,id,field){
+  const item=S[arr].find(x=>String(x.id)===String(id));
+  if(item){item[field]=el.value;saveAll();if(arr==='milestones')renderMilestones();}
+}
+
+function deleteRow(arr,id){
+  if(!confirm('Delete this item?'))return;
+  S[arr]=S[arr].filter(x=>String(x.id)!==String(id));
+  saveAll();renderAll();
+}
+
+// ── ONE PAGER ──────────────────────────────────────────────────────────────
+function renderOnePager(){
+  const m=S.meta;
+  const nextMs=[...S.milestones].filter(x=>x.date&&!isPast(x.date)).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,3);
+  const topRisks=[...S.risks].filter(x=>x.status!=='Closed').sort((a,b)=>{const o={red:0,amber:1,green:2};return(o[a.rag.toLowerCase()]||1)-(o[b.rag.toLowerCase()]||1)}).slice(0,3);
+  const openAc=S.actions.filter(x=>x.status!=='Done').length;
+  const atRiskWs=S.workstreams.filter(x=>x.rag==='red').map(x=>x.name).join(', ')||'None';
+  const keyContacts=S.stakeholders.filter(x=>x.keyContact===true);
+  const sponsor=S.stakeholders.find(x=>x.role==='Program Sponsor');
+
+  document.getElementById('op-content').innerHTML=`
+    <div class="op-hdr">
+      <div><h2>Hotel Comp on Fees</h2><p style="font-size:.78rem;color:var(--grey)">${m.phase} · ${today()}</p></div>
+      <span class="rag-pill rag-${m.rag}" onclick="cycleRagHeader()" title="Click to update RAG">${m.rag.charAt(0).toUpperCase()+m.rag.slice(1)}</span>
+    </div>
+    <div style="background:var(--lblue);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.84rem;color:var(--grey)">
+      <strong style="color:var(--navy)">Objective: </strong><span contenteditable="true" onblur="saveMeta(this,'objective')" style="outline:none">${m.objective}</span>
+    </div>
+    <div class="op-section" style="margin-bottom:20px">
+      <h4>The three phases</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="background:var(--lgrey);border-radius:7px;padding:11px 13px;font-size:.8rem;color:var(--grey)"><strong style="color:var(--navy);display:block;margin-bottom:3px">1A</strong><span contenteditable="true" onblur="saveMeta(this,'p1a')" style="outline:none">${m.p1a}</span></div>
+        <div style="background:var(--lgrey);border-radius:7px;padding:11px 13px;font-size:.8rem;color:var(--grey)"><strong style="color:var(--navy);display:block;margin-bottom:3px">1B</strong><span contenteditable="true" onblur="saveMeta(this,'p1b')" style="outline:none">${m.p1b}</span></div>
+        <div style="background:var(--lgrey);border-radius:7px;padding:11px 13px;font-size:.8rem;color:var(--grey)"><strong style="color:var(--navy);display:block;margin-bottom:3px">1C</strong><span contenteditable="true" onblur="saveMeta(this,'p1c')" style="outline:none">${m.p1c}</span></div>
+      </div>
+    </div>
+    <div class="op-grid">
+      <div class="op-section">
+        <h4>Program status</h4>
+        <div class="op-row"><span>Program Manager</span><span contenteditable="true" onblur="saveMeta(this,'pm')">${m.pm}</span></div>
+        <div class="op-row"><span>Program Sponsor</span><span contenteditable="true" onblur="saveMeta(this,'sponsor')">${m.sponsor||(sponsor?sponsor.name:'-')}</span></div>
+        <div class="op-row"><span>Current phase</span><span contenteditable="true" onblur="saveMeta(this,'phase')">${m.phase}</span></div>
+        <div class="op-row"><span>RAG</span><span onclick="cycleRagHeader()" style="cursor:pointer" title="Click to change RAG">${m.rag.charAt(0).toUpperCase()+m.rag.slice(1)}</span></div>
+        <div class="op-row"><span>RAG reason</span><span contenteditable="true" onblur="saveMeta(this,'ragReason')" style="max-width:180px">${m.ragReason}</span></div>
+        <div class="op-row"><span>Open actions</span><span>${openAc}</span></div>
+        <div class="op-row"><span>Workstreams at risk</span><span style="max-width:180px">${atRiskWs}</span></div>
+      </div>
+      <div class="op-section">
+        <h4>Next milestones</h4>
+        ${nextMs.map(x=>`<div class="op-row"><span contenteditable="true" onblur="saveCell(this,'milestones',${x.id},'name')">${x.name}</span><input type="date" value="${x.date}" onchange="saveDateCell(this,'milestones',${x.id},'date')" style="text-align:right"></div>`).join('')||'<p style="font-size:.82rem;color:#aaa">None upcoming</p>'}
+        <h4 style="margin-top:14px">Top risks</h4>
+        ${topRisks.map(x=>`<div style="display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid #f5f5f5">${ragBadge(x.rag)}<span style="font-size:.81rem;color:var(--grey);flex:1" contenteditable="true" onblur="saveCell(this,'risks',${x.id},'risk')">${x.risk}</span></div>`).join('')||'<p style="font-size:.82rem;color:#aaa">No open risks</p>'}
+      </div>
+    </div>
+    <div class="op-section">
+      <h4>Key contacts</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
+        ${keyContacts.map(x=>`<div style="background:var(--lgrey);border-radius:6px;padding:8px 10px"><div style="font-size:.82rem;font-weight:700;color:var(--dark)">${x.name}</div><div style="font-size:.72rem;color:var(--grey)">${x.role}</div>${x.slack?`<div style="font-size:.69rem;color:var(--blue);margin-top:2px">${x.slack}</div>`:''}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────
+function renderDashboard(){
+  const openAc=S.actions.filter(x=>x.status!=='Done').length;
+  const redRisks=S.risks.filter(x=>x.status!=='Closed'&&x.rag==='red').length;
+  const nextMs=[...S.milestones].filter(x=>x.date&&!isPast(x.date)).sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
+  const rag=S.meta.rag;
+
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat ${rag==='green'?'g':rag==='red'?'r':'a'}">
+      <div class="stat-val">${rag.charAt(0).toUpperCase()+rag.slice(1)}</div><div class="stat-lbl">Overall RAG</div></div>
+    <div class="stat ${openAc>5?'r':openAc>2?'a':'g'}">
+      <div class="stat-val">${openAc}</div><div class="stat-lbl">Open actions</div></div>
+    <div class="stat ${redRisks>0?'r':'g'}">
+      <div class="stat-val">${redRisks}</div><div class="stat-lbl">Red risks</div></div>
+    <div class="stat ${nextMs&&isSoon(nextMs.date)?'a':''}">
+      <div class="stat-val" style="font-size:1.1rem">${nextMs?fmt(nextMs.date):'-'}</div>
+      <div class="stat-lbl">Next milestone${nextMs?' · '+nextMs.name:''}</div></div>`;
+
+  let wsH='<div class="card"><h3>Workstream status</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">';
+  S.workstreams.forEach(w=>{
+    const bc=w.rag==='red'?'var(--red)':w.rag==='amber'?'var(--amber)':'var(--green)';
+    wsH+=`<div style="border-left:3px solid ${bc};padding:10px 12px;background:var(--lgrey);border-radius:6px">
+      <div style="font-size:.82rem;font-weight:700">${w.name}</div>
+      <div style="font-size:.72rem;color:var(--grey);margin-top:2px">${w.owner}</div>
+      <div style="margin-top:6px">${ragBadge(w.rag)}</div>
+      <div style="font-size:.75rem;color:var(--grey);margin-top:5px">${w.nextAction}</div>
+    </div>`;
+  });
+  wsH+='</div></div>';
+  document.getElementById('dash-ws').innerHTML=wsH;
+
+  const alerts=S.actions.filter(x=>x.status!=='Done'&&((x.status==='Blocked')||(x.due&&isPast(x.due))));
+  let alH='<div class="card" style="margin-top:0"><h3>Overdue / blocked actions</h3>';
+  if(!alerts.length){alH+='<p style="font-size:.82rem;color:#aaa">None - all actions on track.</p>';}
+  else{
+    alH+='<table><thead><tr><th>Action</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>';
+    alerts.forEach(a=>{alH+=`<tr><td>${a.action}</td><td>${a.owner}</td><td style="color:var(--red);font-weight:600">${fmt(a.due)}</td><td>${statusBadge(a.status)}</td></tr>`;});
+    alH+='</tbody></table>';
+  }
+  alH+='</div>';
+  document.getElementById('dash-alerts').innerHTML=alH;
+}
+
+// ── MILESTONES ─────────────────────────────────────────────────────────────
+const MS_STATUS=['Upcoming','Not Started','In Progress','On Track','Pending','At risk','Complete'];
+const MS_SCLS={'Upcoming':'b-blue','Not Started':'b-todo','In Progress':'b-progress','On Track':'b-green','Pending':'b-amber','At risk':'b-amber','Complete':'b-done'};
+function msStatusBadge(id,s){return`<span class="badge ${MS_SCLS[s]||'b-grey'}" style="cursor:pointer" onclick="cycleMsStatus(${id},this)">${s||'Set'}</span>`;}
+function cycleMsStatus(id,el){
+  const m=S.milestones.find(x=>x.id===id);if(!m)return;
+  m.status=MS_STATUS[(MS_STATUS.indexOf(m.status)+1)%MS_STATUS.length];
+  el.className='badge '+(MS_SCLS[m.status]||'b-grey');el.textContent=m.status;schedSave();
+}
+function msRagBadge(id,r){
+  const cls=r==='red'?'b-red':r==='amber'?'b-amber':r==='green'?'b-green':'b-grey';
+  return`<span class="badge ${cls}" style="cursor:pointer" onclick="cycleMsRag(${id},this)">${r?r.charAt(0).toUpperCase()+r.slice(1):'Set'}</span>`;
+}
+function cycleMsRag(id,el){
+  const order=['green','amber','red'];
+  const m=S.milestones.find(x=>x.id===id);if(!m)return;
+  m.rag=order[(order.indexOf(m.rag)+1)%order.length];
+  el.className='badge '+(m.rag==='red'?'b-red':m.rag==='amber'?'b-amber':'b-green');
+  el.textContent=m.rag.charAt(0).toUpperCase()+m.rag.slice(1);schedSave();
+}
+function msRow(m){
+  return`<tr>
+    <td><span contenteditable="true" onblur="saveCell(this,'milestones',${m.id},'name')">${m.name}</span></td>
+    <td><input type="date" value="${m.date||''}" onchange="saveDateCell(this,'milestones',${m.id},'date')"></td>
+    <td><span contenteditable="true" onblur="saveCell(this,'milestones',${m.id},'phase')">${m.phase}</span></td>
+    <td><span contenteditable="true" onblur="saveCell(this,'milestones',${m.id},'owner')">${m.owner}</span></td>
+    <td>${msStatusBadge(m.id,m.status)}</td>
+    <td>${msRagBadge(m.id,m.rag)}</td>
+    <td><span contenteditable="true" onblur="saveCell(this,'milestones',${m.id},'notes')">${m.notes||''}</span></td>
+    <td><button class="btn-del" onclick="deleteRow('milestones',${m.id})">✕</button></td>
+  </tr>`;
+}
+function renderMilestones(){
+  const sorted=[...S.milestones].filter(x=>x.date).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  document.getElementById('ms-tl').innerHTML=sorted.map(m=>{
+    const cls=m.rag==='red'?'tl-dot risk':isPast(m.date)?'tl-dot past':m.status==='At risk'?'tl-dot risk':isSoon(m.date)?'tl-dot soon':'tl-dot';
+    return`<div class="tl-step"><div class="${cls}"></div><div class="tl-nm">${m.name}</div><div class="tl-dt">${fmt(m.date)}</div></div>`;
+  }).join('');
+  const groups=[
+    {label:'Phase 1A - Flat Fee Compensation',test:m=>m.phase==='1A'},
+    {label:'Phase 1B - Fees as Taxes Reclassification',test:m=>m.phase==='1B'},
+    {label:'Shared Milestones',test:m=>m.phase!=='1A'&&m.phase!=='1B'}
+  ];
+  let h='';
+  groups.forEach(g=>{
+    const items=S.milestones.filter(g.test);
+    if(!items.length)return;
+    h+=`<tr class="ms-group"><td colspan="8">${g.label}</td></tr>`;
+    items.forEach(m=>h+=msRow(m));
+  });
+  document.getElementById('ms-tbody').innerHTML=h;
+}
+
+// ── WORKSTREAMS ────────────────────────────────────────────────────────────
+function renderWorkstreams(){
+  document.getElementById('ws-grid').innerHTML=S.workstreams.map(w=>`
+    <div class="ws-card ${w.rag}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div style="font-size:.92rem;font-weight:700" contenteditable="true" onblur="saveCell(this,'workstreams',${w.id},'name')">${w.name}</div>
+        ${ragBadge(w.rag)}
+      </div>
+      <div style="font-size:.75rem;color:var(--grey);margin-bottom:8px">
+        Owner: <span contenteditable="true" onblur="saveCell(this,'workstreams',${w.id},'owner')">${w.owner}</span>
+        &nbsp;·&nbsp;<span contenteditable="true" onblur="saveCell(this,'workstreams',${w.id},'slack')" style="color:var(--blue)">${w.slack||'add Slack'}</span>
+      </div>
+      <span class="ws-lbl">Last update</span>
+      <div style="font-size:.81rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'workstreams',${w.id},'lastUpdate')">${w.lastUpdate}</div>
+      <span class="ws-lbl">Next action</span>
+      <div style="font-size:.81rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'workstreams',${w.id},'nextAction')">${w.nextAction}</div>
+      <div style="text-align:right;margin-top:8px"><button class="btn-del" onclick="deleteRow('workstreams',${w.id})">✕</button></div>
+    </div>`).join('');
+}
+
+// ── ACTIONS ────────────────────────────────────────────────────────────────
+function renderActions(){
+  const of=document.getElementById('af-owner').value;
+  const wf=document.getElementById('af-ws').value;
+  const sf=document.getElementById('af-status').value;
+
+  const owners=[...new Set(S.actions.map(x=>x.owner))].sort();
+  const wss=[...new Set(S.actions.map(x=>x.ws))].sort();
+  const prevO=document.getElementById('af-owner').value;
+  const prevW=document.getElementById('af-ws').value;
+  document.getElementById('af-owner').innerHTML='<option value="">All owners</option>'+owners.map(o=>`<option${o===prevO?' selected':''}>${o}</option>`).join('');
+  document.getElementById('af-ws').innerHTML='<option value="">All workstreams</option>'+wss.map(w=>`<option${w===prevW?' selected':''}>${w}</option>`).join('');
+
+  let data=[...S.actions];
+  if(of)data=data.filter(x=>x.owner===of);
+  if(wf)data=data.filter(x=>x.ws===wf);
+  if(sf)data=data.filter(x=>x.status===sf);
+  data.sort((a,b)=>{const o={'Blocked':0,'To Do':1,'In Progress':2,'Done':3};return(o[a.status]||0)-(o[b.status]||0);});
+
+  document.getElementById('ac-tbody').innerHTML=data.length?data.map(a=>{
+    const ov=a.due&&isPast(a.due)&&a.status!=='Done';
+    return`<tr>
+      <td><span contenteditable="true" onblur="saveCell(this,'actions',${a.id},'action')">${a.action}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'actions',${a.id},'owner')">${a.owner}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'actions',${a.id},'ws')">${a.ws}</span></td>
+      <td><input type="date" value="${a.due||''}" onchange="saveDateCell(this,'actions',${a.id},'due')" style="color:${ov?'var(--red)':'var(--dark)'};font-weight:${ov?700:400}"></td>
+      <td>${statusBadge(a.status)}</td>
+      <td><span contenteditable="true" onblur="saveCell(this,'actions',${a.id},'notes')">${a.notes||''}</span></td>
+      <td><button class="btn-del" onclick="deleteRow('actions',${a.id})">✕</button></td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="7" style="text-align:center;color:#aaa;padding:20px">No actions match this filter.</td></tr>';
+}
+
+function clearFilters(){
+  ['af-owner','af-ws','af-status'].forEach(id=>document.getElementById(id).value='');
+  renderActions();
+}
+
+// ── RISKS ──────────────────────────────────────────────────────────────────
+function renderRisks(){
+  const sorted=[...S.risks].sort((a,b)=>{const o={red:0,amber:1,green:2};return(o[a.rag.toLowerCase()]||1)-(o[b.rag.toLowerCase()]||1);});
+  document.getElementById('ri-tbody').innerHTML=sorted.map(r=>`
+    <tr>
+      <td><span contenteditable="true" onblur="saveCell(this,'risks',${r.id},'risk')">${r.risk}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'risks',${r.id},'type')">${r.type}</span></td>
+      <td>${ragBadge(r.rag)}</td>
+      <td><span contenteditable="true" onblur="saveCell(this,'risks',${r.id},'owner')">${r.owner}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'risks',${r.id},'mitigation')">${r.mitigation}</span></td>
+      <td>${statusBadge(r.status)}</td>
+      <td><button class="btn-del" onclick="deleteRow('risks',${r.id})">✕</button></td>
+    </tr>`).join('');
+}
+
+// ── STEERCO ───────────────────────────────────────────────────────────────
+function renderSteerco(){
+  const sorted=[...S.steerco].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('sc-list').innerHTML=sorted.length?sorted.map(s=>`
+    <div class="card" style="border-left:4px solid var(--navy)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:.92rem;font-weight:700" contenteditable="true" onblur="saveCell(this,'steerco',${s.id},'title')">${s.title}</div>
+          <div style="font-size:.74rem;color:var(--grey);margin-top:2px">${fmt(s.date)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">${statusBadge(s.status)}<button class="btn-del" onclick="deleteRow('steerco',${s.id})">✕</button></div>
+      </div>
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div>
+          <div style="font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);margin-bottom:4px">Materials</div>
+          <div style="font-size:.81rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'steerco',${s.id},'materials')">${s.materials}</div>
+        </div>
+        <div>
+          <div style="font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);margin-bottom:4px">Decisions</div>
+          <div style="font-size:.81rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'steerco',${s.id},'decisions')">${s.decisions}</div>
+        </div>
+        <div>
+          <div style="font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);margin-bottom:4px">Key actions</div>
+          <div style="font-size:.81rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'steerco',${s.id},'actions')">${s.actions}</div>
+        </div>
+      </div>
+    </div>`).join(''):'<p style="color:#aaa;font-size:.83rem">No SteerCo meetings logged yet.</p>';
+}
+
+// ── DECISIONS ─────────────────────────────────────────────────────────────
+function renderDecisions(){
+  const sorted=[...S.decisions].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('dc-tbody').innerHTML=sorted.map(d=>`
+    <tr>
+      <td><span contenteditable="true" onblur="saveCell(this,'decisions',${d.id},'title')">${d.title}</span></td>
+      <td><input type="date" value="${d.date}" onchange="saveDateCell(this,'decisions',${d.id},'date')"></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'decisions',${d.id},'forum')">${d.forum}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'decisions',${d.id},'owner')">${d.owner}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'decisions',${d.id},'detail')" style="font-size:.79rem">${d.detail}</span></td>
+      <td>${statusBadge(d.status)}</td>
+      <td><button class="btn-del" onclick="deleteRow('decisions',${d.id})">✕</button></td>
+    </tr>`).join('');
+}
+
+// ── MEETINGS ───────────────────────────────────────────────────────────────
+function renderMeetings(){
+  const sorted=[...S.meetings].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('mt-list').innerHTML=sorted.length?sorted.map(m=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:.92rem;font-weight:700" contenteditable="true" onblur="saveCell(this,'meetings',${m.id},'title')">${m.title}</div>
+          <div style="font-size:.74rem;color:var(--grey);margin-top:2px">${fmt(m.date)} · <span contenteditable="true" onblur="saveCell(this,'meetings',${m.id},'attendees')">${m.attendees}</span></div>
+        </div>
+        <button class="btn-del" onclick="deleteRow('meetings',${m.id})">✕</button>
+      </div>
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div style="font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);margin-bottom:4px">Decisions</div>
+          <div style="font-size:.82rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'meetings',${m.id},'decisions')">${m.decisions}</div>
+        </div>
+        <div>
+          <div style="font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--blue);margin-bottom:4px">Actions</div>
+          <div style="font-size:.82rem;color:var(--grey)" contenteditable="true" onblur="saveCell(this,'meetings',${m.id},'actions')">${m.actions}</div>
+        </div>
+      </div>
+    </div>`).join(''):'<p style="color:#aaa;font-size:.83rem">No meetings logged yet.</p>';
+}
+
+// ── STAKEHOLDERS ───────────────────────────────────────────────────────────
+function renderStakeholders(){
+  document.getElementById('st-tbody').innerHTML=S.stakeholders.map(s=>`
+    <tr>
+      <td><span contenteditable="true" onblur="saveCell(this,'stakeholders',${s.id},'name')">${s.name}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'stakeholders',${s.id},'role')">${s.role}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'stakeholders',${s.id},'ws')">${s.ws}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'stakeholders',${s.id},'slack')" style="color:var(--blue)">${s.slack||'-'}</span></td>
+      <td><span class="badge ${s.influence==='High'?'b-blue':'b-grey'}" onclick="cycleInfluence(this,'stakeholders',${s.id})">${s.influence}</span></td>
+      <td><input type="date" value="${s.lastEngaged||''}" onchange="saveDateCell(this,'stakeholders',${s.id},'lastEngaged')"></td>
+      <td><button class="btn-del" onclick="deleteRow('stakeholders',${s.id})">✕</button></td>
+    </tr>`).join('');
+}
+
+function cycleInfluence(el,arr,id){
+  const c=['High','Medium','Low'];
+  el.textContent=c[(c.indexOf(el.textContent)+1)%3];
+  el.className='badge '+(el.textContent==='High'?'b-blue':'b-grey');
+  const item=S[arr].find(x=>x.id===id);if(item){item.influence=el.textContent;saveAll();}
+}
+
+// ── RACI ───────────────────────────────────────────────────────────────────
+const RACI_CLS={R:'b-green',A:'b-blue',C:'b-amber',I:'b-grey'};
+function renderRaci(){
+  const R=S.raci;if(!R){document.getElementById('raci-tbl').innerHTML='';return;}
+  let h='<thead><tr><th>Workstream / Area</th>';
+  R.people.forEach(p=>{h+=`<th style="text-align:center;white-space:nowrap">${p} <span onclick="delRaciPerson('${p.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.55" title="Remove person">&times;</span></th>`;});
+  h+='<th></th></tr></thead><tbody>';
+  R.rows.forEach(row=>{
+    h+=`<tr><td><span contenteditable="true" onblur="saveRaciArea(${row.id},this)">${row.area}</span></td>`;
+    R.people.forEach(p=>{const v=row.cells[p]||'';h+=`<td style="text-align:center"><span class="badge ${v?RACI_CLS[v]:'b-todo'}" style="min-width:20px;cursor:pointer" onclick="cycleRaci(${row.id},'${p.replace(/'/g,"\\'")}',this)">${v||'+'}</span></td>`;});
+    h+=`<td><button class="btn-del" onclick="delRaciRow(${row.id})">&times;</button></td></tr>`;
+  });
+  h+='</tbody>';
+  document.getElementById('raci-tbl').innerHTML=h;
+}
+function cycleRaci(id,person,el){
+  const order=['','R','A','C','I'];
+  const row=S.raci.rows.find(r=>r.id===id);if(!row)return;
+  const nx=order[(order.indexOf(row.cells[person]||'')+1)%order.length];
+  if(nx)row.cells[person]=nx;else delete row.cells[person];
+  el.textContent=nx||'+';
+  el.className='badge '+(nx?RACI_CLS[nx]:'b-todo');
+  schedSave();
+}
+function saveRaciArea(id,el){const row=S.raci.rows.find(r=>r.id===id);if(row){row.area=el.textContent.trim();schedSave();}}
+function addRaciRow(){S.raci.rows.push({id:nid(S.raci.rows),area:'New area',cells:{}});saveAll();renderRaci();}
+function delRaciRow(id){if(!confirm('Delete this RACI row?'))return;S.raci.rows=S.raci.rows.filter(r=>r.id!==id);saveAll();renderRaci();}
+function addRaciPerson(){const n=prompt('Add person to the RACI (name):');if(!n)return;const nm=n.trim();if(nm&&!S.raci.people.includes(nm))S.raci.people.push(nm);saveAll();renderRaci();}
+function delRaciPerson(p){if(!confirm('Remove '+p+' from the RACI?'))return;S.raci.people=S.raci.people.filter(x=>x!==p);S.raci.rows.forEach(r=>delete r.cells[p]);saveAll();renderRaci();}
+
+// ── ARTEFACTS ──────────────────────────────────────────────────────────────
+function renderArtefacts(){
+  const sorted=[...S.artefacts].sort((a,b)=>a.cat.localeCompare(b.cat));
+  document.getElementById('ar-tbody').innerHTML=sorted.map(a=>`
+    <tr>
+      <td><span contenteditable="true" onblur="saveCell(this,'artefacts',${a.id},'doc')">${a.doc}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'artefacts',${a.id},'cat')">${a.cat}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'artefacts',${a.id},'desc')">${a.desc}</span></td>
+      <td><span contenteditable="true" onblur="saveCell(this,'artefacts',${a.id},'owner')">${a.owner}</span></td>
+      <td>${a.link?`<a href="${a.link}" target="_blank" class="badge b-blue" style="text-decoration:none">Open →</a>`:`<span contenteditable="true" onblur="saveLink(this,${a.id})" style="font-size:.76rem;color:#aaa">${a.link||'add link'}</span>`}</td>
+      <td><button class="btn-del" onclick="deleteRow('artefacts',${a.id})">✕</button></td>
+    </tr>`).join('');
+}
+
+function saveLink(el,id){
+  const item=S.artefacts.find(x=>x.id===id);
+  if(item){item.link=el.textContent.trim();saveAll();renderArtefacts();}
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────────
+let _mt='';
+const MF={
+  milestone:`<label>Name</label><input id="f-name" placeholder="e.g. Phase 1C UAT">
+    <label>Date</label><input id="f-date" type="date">
+    <label>Phase</label><input id="f-phase" placeholder="1A / 1B / All">
+    <label>Owner</label><input id="f-owner" placeholder="@handle or name">
+    <label>Status</label><select id="f-status"><option>Upcoming</option><option>Not Started</option><option>In Progress</option><option>On Track</option><option>Pending</option><option>At risk</option><option>Complete</option></select>
+    <label>RAG</label><select id="f-rag"><option>Green</option><option selected>Amber</option><option>Red</option></select>
+    <label>Notes</label><textarea id="f-notes"></textarea>`,
+  workstream:`<label>Name</label><input id="f-name" placeholder="e.g. Partner Comms">
+    <label>Owner</label><input id="f-owner">
+    <label>RAG</label><select id="f-rag"><option>Green</option><option selected>Amber</option><option>Red</option></select>
+    <label>Last update</label><input id="f-lastUpdate" placeholder="What happened last">
+    <label>Next action</label><input id="f-nextAction" placeholder="What's next">
+    <label>Slack</label><input id="f-slack" placeholder="@handle">`,
+  action:`<label>Action</label><textarea id="f-action" placeholder="Describe the action"></textarea>
+    <label>Owner</label><input id="f-owner">
+    <label>Workstream</label><input id="f-ws" placeholder="e.g. Connectivity">
+    <label>Due date</label><input id="f-due" type="date">
+    <label>Status</label><select id="f-status"><option>To Do</option><option>In Progress</option><option>Blocked</option><option>Done</option></select>
+    <label>Notes</label><textarea id="f-notes"></textarea>`,
+  risk:`<label>Risk / Issue</label><textarea id="f-risk"></textarea>
+    <label>Type</label><select id="f-type"><option>Risk</option><option>Issue</option><option>Assumption</option><option>Dependency</option></select>
+    <label>RAG</label><select id="f-rag"><option>Green</option><option selected>Amber</option><option>Red</option></select>
+    <label>Owner</label><input id="f-owner">
+    <label>Mitigation</label><textarea id="f-mitigation"></textarea>`,
+  steerco:`<label>Title</label><input id="f-title" placeholder="e.g. SteerCo - 14 Sep gate">
+    <label>Date</label><input id="f-date" type="date">
+    <label>Materials</label><textarea id="f-materials" placeholder="Decks, papers, analysis presented"></textarea>
+    <label>Decisions</label><textarea id="f-decisions" placeholder="What was decided"></textarea>
+    <label>Key actions</label><textarea id="f-actions" placeholder="Owner: action, due date"></textarea>
+    <label>Status</label><select id="f-status"><option>Upcoming</option><option>Complete</option></select>`,
+  decision:`<label>Decision</label><input id="f-title" placeholder="e.g. Rollout date confirmed">
+    <label>Date</label><input id="f-date" type="date">
+    <label>Forum</label><input id="f-forum" placeholder="e.g. SteerCo, Program WG, Legal review">
+    <label>Owner</label><input id="f-owner">
+    <label>Detail</label><textarea id="f-detail" placeholder="Context, rationale, implications"></textarea>
+    <label>Status</label><select id="f-status"><option>Confirmed</option><option>Pending</option><option>Superseded</option></select>`,
+  meeting:`<label>Title</label><input id="f-title" placeholder="e.g. SteerCo 14 Jul">
+    <label>Date</label><input id="f-date" type="date">
+    <label>Attendees</label><input id="f-attendees">
+    <label>Key decisions</label><textarea id="f-decisions"></textarea>
+    <label>Actions</label><textarea id="f-actions" placeholder="Owner: action, due date"></textarea>`,
+  stakeholder:`<label>Name</label><input id="f-name">
+    <label>Role</label><input id="f-role" placeholder="e.g. Program Sponsor">
+    <label>Workstream</label><input id="f-ws">
+    <label>Slack</label><input id="f-slack" placeholder="@handle">
+    <label>Influence</label><select id="f-influence"><option>High</option><option selected>Medium</option><option>Low</option></select>`,
+  artefact:`<label>Document name</label><input id="f-doc">
+    <label>Category</label><input id="f-cat" placeholder="e.g. Financials, Comms, Legal">
+    <label>Description</label><textarea id="f-desc"></textarea>
+    <label>Owner</label><input id="f-owner">
+    <label>Link (URL)</label><input id="f-link" placeholder="https://">`
+};
+
+function openModal(t){
+  _mt=t;
+  document.getElementById('modal-title').textContent='Add '+t.charAt(0).toUpperCase()+t.slice(1);
+  document.getElementById('modal-body').innerHTML=MF[t]||'';
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+function closeBg(e){if(e.target===document.getElementById('modal-bg'))closeModal();}
+function gv(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+
+function saveModal(){
+  const t=_mt;
+  if(t==='milestone'){
+    if(!gv('f-name'))return;
+    S.milestones.push({id:nid(S.milestones),name:gv('f-name'),date:gv('f-date'),phase:gv('f-phase'),owner:gv('f-owner'),status:gv('f-status')||'Upcoming',rag:(gv('f-rag')||'amber').toLowerCase(),notes:gv('f-notes')});
+  }else if(t==='workstream'){
+    if(!gv('f-name'))return;
+    S.workstreams.push({id:nid(S.workstreams),name:gv('f-name'),owner:gv('f-owner'),rag:gv('f-rag').toLowerCase(),status:'In Progress',lastUpdate:gv('f-lastUpdate'),nextAction:gv('f-nextAction'),slack:gv('f-slack')});
+  }else if(t==='action'){
+    if(!gv('f-action'))return;
+    S.actions.push({id:nid(S.actions),action:gv('f-action'),owner:gv('f-owner'),ws:gv('f-ws'),due:gv('f-due'),status:gv('f-status')||'To Do',notes:gv('f-notes')});
+  }else if(t==='risk'){
+    if(!gv('f-risk'))return;
+    S.risks.push({id:nid(S.risks),risk:gv('f-risk'),type:gv('f-type'),rag:gv('f-rag').toLowerCase(),owner:gv('f-owner'),mitigation:gv('f-mitigation'),status:'Open'});
+  }else if(t==='steerco'){
+    if(!gv('f-title'))return;
+    S.steerco.push({id:nid(S.steerco),title:gv('f-title'),date:gv('f-date'),materials:gv('f-materials'),decisions:gv('f-decisions'),actions:gv('f-actions'),status:gv('f-status')||'Upcoming'});
+  }else if(t==='decision'){
+    if(!gv('f-title'))return;
+    S.decisions.push({id:nid(S.decisions),title:gv('f-title'),date:gv('f-date'),forum:gv('f-forum'),owner:gv('f-owner'),detail:gv('f-detail'),status:gv('f-status')||'Confirmed'});
+  }else if(t==='meeting'){
+    if(!gv('f-title'))return;
+    S.meetings.push({id:nid(S.meetings),title:gv('f-title'),date:gv('f-date'),attendees:gv('f-attendees'),decisions:gv('f-decisions'),actions:gv('f-actions')});
+  }else if(t==='stakeholder'){
+    if(!gv('f-name'))return;
+    S.stakeholders.push({id:nid(S.stakeholders),name:gv('f-name'),role:gv('f-role'),ws:gv('f-ws'),slack:gv('f-slack'),influence:gv('f-influence')||'Medium',lastEngaged:''});
+  }else if(t==='artefact'){
+    if(!gv('f-doc'))return;
+    S.artefacts.push({id:nid(S.artefacts),doc:gv('f-doc'),cat:gv('f-cat'),desc:gv('f-desc'),owner:gv('f-owner'),link:gv('f-link')});
+  }
+  saveAll();closeModal();renderAll();
+}
+
+// ── TABS ───────────────────────────────────────────────────────────────────
+function switchTab(v,btn){
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tbtn').forEach(e=>e.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  btn.classList.add('active');
+  renderTab(v);
+}
+
+function renderTab(v){
+  ({onepager:renderOnePager,dashboard:renderDashboard,milestones:renderMilestones,
+    workstreams:renderWorkstreams,actions:renderActions,risks:renderRisks,
+    steerco:renderSteerco,decisions:renderDecisions,meetings:renderMeetings,stakeholders:renderStakeholders,raci:renderRaci,artefacts:renderArtefacts}[v]||Function)();
+}
+
+function renderAll(){
+  updateHeader();
+  renderOnePager();renderDashboard();renderMilestones();renderWorkstreams();
+  renderActions();renderRisks();renderSteerco();renderDecisions();renderMeetings();renderStakeholders();renderRaci();renderArtefacts();
+}
+
+loadState().then(renderAll);
+</script>
+</body>
+</html>
